@@ -2,6 +2,15 @@
   "spider": "https://nos.netease.com/ysf/6c46906d73cf795a4027e08817665e71.txt;md5;18224e76588328ec614bbbc1466e1a4b",
   "sites": [
     {
+  
+        "key": "Nostr",
+        "name": "Nostr推荐",
+        "type": 3,
+        "api": "csp_Nostr",
+       "homePage": "https://18746.kstore.space/nostr-emby.html"
+
+    },
+    {
       "key": "NewGuanYing",
       "name": "🎬观影4K",
       "type": 3,
