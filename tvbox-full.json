@@ -1,0 +1,96 @@
+{
+  "spider": "https://nos.netease.com/ysf/6c46906d73cf795a4027e08817665e71.txt;md5;18224e76588328ec614bbbc1466e1a4b",
+  "sites": [
+    {
+      "key": "NewGuanYing",
+      "name": "🎬观影4K",
+      "type": 3,
+      "api": "csp_NewGuanYingGuard",
+      "searchable": 1,
+      "changeable": 1
+    },
+    {
+      "key": "NewZhiZhen",
+      "name": "🎬至臻4K",
+      "type": 3,
+      "api": "csp_NewZhiZhenGuard",
+      "searchable": 1,
+      "changeable": 1
+    },
+    {
+      "key": "NewDuoDuo",
+      "name": "🎬多多4K",
+      "type": 3,
+      "api": "csp_NewDuoDuoGuard",
+      "searchable": 1,
+      "changeable": 1
+    },
+    {
+      "key": "AnimeMoDu",
+      "name": "📺魔都动漫",
+      "type": 3,
+      "api": "csp_AnimeMoDuGuard",
+      "searchable": 1
+    },
+    {
+      "key": "AnimeFanShu",
+      "name": "📺番薯动漫",
+      "type": 3,
+      "api": "csp_AnimeFanShuGuard",
+      "searchable": 1
+    },
+    {
+      "key": "LiveHuYa",
+      "name": "📡虎牙直播",
+      "type": 3,
+      "api": "csp_LiveHuYaGuard"
+    },
+    {
+      "key": "LiveDouYu",
+      "name": "📡斗鱼直播",
+      "type": 3,
+      "api": "csp_LiveDouYuGuard"
+    },
+    {
+      "key": "bilibiliys",
+      "name": "🎞哔哩影视",
+      "type": 3,
+      "api": "csp_NewBiLiYSGuard"
+    },
+    {
+      "key": "MyQuark",
+      "name": "☁夸克网盘",
+      "type": 3,
+      "api": "csp_MyQuarkGuard",
+      "searchable": 1
+    },
+    {
+      "key": "MyBaiDu",
+      "name": "☁百度网盘",
+      "type": 3,
+      "api": "csp_MyBaiDuGuard",
+      "searchable": 1
+    },
+    {
+      "key": "MyPan123",
+      "name": "☁123网盘",
+      "type": 3,
+      "api": "csp_MyPan123Guard",
+      "searchable": 1
+    },
+    {
+      "key": "emby",
+      "name": "💎Emby专区",
+      "type": 3,
+      "api": "csp_EmbyGuard"
+    }
+  ],
+  "lives": [
+    {
+      "name": "综合直播",
+      "type": 0,
+      "playerType": 2,
+      "url": "https://ghfast.top/https://raw.githubusercontent.com/develop202/migu_video/refs/heads/main/interface.txt"
+    }
+  ]
+}
