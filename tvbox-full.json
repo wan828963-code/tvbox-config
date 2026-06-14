@@ -1,4 +1,7 @@
-  {
+{
+  "spider": "https://zl.wpscdn.cn/2026/06/14/space_img/90682464-540a-41a5-b980-b5ece07998f4.png;md5;ae34799022ea04bad51b3f9ce57147cf",
+  "danmaku": "http://127.0.0.1:2525/danmu?name={name}&epid={episode}",
+{
     "key": "云霄独家免扫4K",
     "name": "☁云霄丨独家丨免扫4K",
     "type": 3,
