@@ -5,7 +5,7 @@
       "key": "test1",
       "name": "测试线路",
       "type": 3,
-      "api": "https://example.com/api.php/provide/vod/",
+      "api": "https://ncstatic-file.clewm.net/rsrc/2026/0416/20/1fe667cd217a0c314b8ca59310dbf45d.jpg;md5;a4f403a000bc5e4ebdd9da27fcb05852",
       "searchable": 1,
       "quickSearch": 1,
       "changeable": 1
