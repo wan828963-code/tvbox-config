@@ -3,6 +3,13 @@
   "wallpaper": "http://王二小放牛娃牛逼.999888987.xyz",
   "sites": [
     {
+  "key": "anime",
+  "name": "动漫源",
+  "type": 3,
+  "logo": "https://your-domain.com/k9X2pA1",
+  "api": "https://xxx.com/api.php"
+    },
+    {
       "key": "小万独家免扫4K",
       "name": "☁云霄丨独家丨免扫4K",
       "type": 3,
