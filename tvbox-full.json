@@ -103,6 +103,12 @@
             "searchable": 1,
             "ext": "https://gh-proxy.org/https://raw.githubusercontent.com/Jsnzkpg/Jsnzkpg/refs/heads/Jsnzkpg/stymei/alist.json"
         },
+	      	{
+			"key": "fY",
+			"name": "🐬枫叶影院(关梯子使用)",
+			"type": 3,
+			"api": "https://ghfast.top/https://raw.githubusercontent.com/FGBLH/HKL/refs/heads/main/py/枫叶影院.py"
+	       	},
         {
             "key": "裤佬电视直播",
             "name": "☁云霄丨电视丨直播",
