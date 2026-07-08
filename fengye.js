@@ -1,928 +1,188 @@
-import cheerio from 'assets://js/lib/cheerio.min.js';
+# -*- coding: utf-8 -*-
+import re
+import json
+from bs4 import BeautifulSoup
+import requests
+from base.spider import Spider as BaseSpider
 
-// import cheerio from '../lib/cheerio.min.js';
-const sites = [
-    'https://www.cd-zj.com',
-    'https://www.gzwlr.com',
-]
-const appConfig = {
-    siteName: "苹果4k影视院",
-    siteUrl: sites[0]
-}
-const UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36";
-const Headers = {
-    "User-Agent": UA,
-    "Referer": appConfig.siteUrl + "/",
-}
-async function init(ext) {}
 
-function getYearFilter() {
-    let years = [{
-        "n": "全部",
-        "v": ""
-    }];
-    const currentYear = new Date().getFullYear().toString();
-    for (let y = currentYear; y >= currentYear - 22; y--) {
-        years.push({
-            "n": String(y),
-            "v": String(y)
-        });
-    }
-    return {
-        "key": "year",
-        "name": "年份",
-        "value": years
-    };
-}
+class Spider(BaseSpider):
+    def init(self, extend=""):
+        self.host = "https://maihaolian.com"
+        self.headers = {
+            "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 16_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.0 Mobile/15E148 Safari/604.1",
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "Accept-Language": "zh-CN,zh;q=0.9",
+        }
 
-function getLetterFilter() {
-    return {
-        "key": "letter",
-        "name": "字母",
-        "value": [{
-                "n": "全部",
-                "v": ""
-            },
-            {
-                "n": "A",
-                "v": "A"
-            }, {
-                "n": "B",
-                "v": "B"
-            }, {
-                "n": "C",
-                "v": "C"
-            }, {
-                "n": "D",
-                "v": "D"
-            },
-            {
-                "n": "E",
-                "v": "E"
-            }, {
-                "n": "F",
-                "v": "F"
-            }, {
-                "n": "G",
-                "v": "G"
-            }, {
-                "n": "H",
-                "v": "H"
-            },
-            {
-                "n": "I",
-                "v": "I"
-            }, {
-                "n": "J",
-                "v": "J"
-            }, {
-                "n": "K",
-                "v": "K"
-            }, {
-                "n": "L",
-                "v": "L"
-            },
-            {
-                "n": "M",
-                "v": "M"
-            }, {
-                "n": "N",
-                "v": "N"
-            }, {
-                "n": "O",
-                "v": "O"
-            }, {
-                "n": "P",
-                "v": "P"
-            },
-            {
-                "n": "Q",
-                "v": "Q"
-            }, {
-                "n": "R",
-                "v": "R"
-            }, {
-                "n": "S",
-                "v": "S"
-            }, {
-                "n": "T",
-                "v": "T"
-            },
-            {
-                "n": "U",
-                "v": "U"
-            }, {
-                "n": "V",
-                "v": "V"
-            }, {
-                "n": "W",
-                "v": "W"
-            }, {
-                "n": "X",
-                "v": "X"
-            },
-            {
-                "n": "Y",
-                "v": "Y"
-            }, {
-                "n": "Z",
-                "v": "Z"
-            }, {
-                "n": "0-9",
-                "v": "0-9"
-            }
+    def getName(self):
+        return '枫叶影院'
+
+    def _fetch(self, url):
+        if not url.startswith('http'):
+            url = self.host + url
+        try:
+            resp = requests.get(url, headers=self.headers, timeout=10)
+            resp.encoding = 'utf-8'
+            return resp.text
+        except:
+            return ""
+
+    def _parse_video_list(self, html):
+        soup = BeautifulSoup(html, 'html.parser')
+        items = []
+        for item in soup.select('.public-list-div.public-list-bj'):
+            a = item.select_one('a.public-list-exp')
+            if not a:
+                continue
+            vod_id = a.get('href', '')
+            vod_name = a.get('title', '').strip()
+            img = item.select_one('img')
+            vod_pic = img.get('data-src') or img.get('src', '') if img else ''
+            remarks = item.select_one('.public-prt-g')
+            upto = item.select_one('.ft2')
+            vod_remarks = f"{remarks.get_text(strip=True) if remarks else ''} {upto.get_text(strip=True) if upto else ''}".strip()
+            if vod_id and vod_name:
+                items.append({
+                    "vod_id": vod_id,
+                    "vod_name": vod_name,
+                    "vod_pic": vod_pic,
+                    "vod_remarks": vod_remarks
+                })
+        return items
+
+    def homeContent(self, filter):
+        return {
+            "class": [
+                {'type_id': "/label/qq", 'type_name': "腾讯VIP精选"},
+                {'type_id': "/label/bli", 'type_name': "B站VIP精选"},
+                {'type_id': "/label/youku", 'type_name': "优酷VIP精选"},
+                {"type_id": "5", "type_name": "红果短剧"},
+                {"type_id": "2", "type_name": "电视剧"},
+                {"type_id": "1", "type_name": "电影"},
+                {"type_id": "4", "type_name": "动漫"},
+                {"type_id": "3", "type_name": "综艺"},
+            ],
+            "filters": self._build_filters()
+        }
+
+    def _build_filters(self):
+        area = [{"n": "全部", "v": ""}, {"n": "大陆", "v": "大陆"}, {"n": "香港", "v": "香港"},
+                {"n": "台湾", "v": "台湾"}, {"n": "美国", "v": "美国"}, {"n": "韩国", "v": "韩国"},
+                {"n": "日本", "v": "日本"}, {"n": "泰国", "v": "泰国"}, {"n": "新加坡", "v": "新加坡"},
+                {"n": "马来西亚", "v": "马来西亚"}, {"n": "印度", "v": "印度"}, {"n": "英国", "v": "英国"},
+                {"n": "法国", "v": "法国"}, {"n": "加拿大", "v": "加拿大"}, {"n": "西班牙", "v": "西班牙"},
+                {"n": "俄罗斯", "v": "俄罗斯"}, {"n": "其它", "v": "其它"}]
+
+        year = [{"n": "全部", "v": ""}] + [{"n": str(y), "v": str(y)} for y in range(2026, 2003, -1)]
+
+        lang = [{"n": "全部", "v": ""}, {"n": "国语", "v": "国语"}, {"n": "英语", "v": "英语"},
+                {"n": "粤语", "v": "粤语"}, {"n": "闽南语", "v": "闽南语"}, {"n": "韩语", "v": "韩语"},
+                {"n": "日语", "v": "日语"}, {"n": "法语", "v": "法语"}, {"n": "德语", "v": "德语"},
+                {"n": "其它", "v": "其它"}]
+
+        sort = [{"n": "时间", "v": "time"}, {"n": "人气", "v": "hits"}, {"n": "评分", "v": "score"}]
+
+        return {
+            "2": self._build_type_filters("2", area, year, lang, sort),
+            "1": self._build_type_filters("1", area, year, lang, sort),
+            "4": self._build_type_filters("4", area, year, lang, sort),
+            "3": self._build_type_filters("3", area, year, lang, sort),
+            "5": [
+                {"key": "year", "name": "年份", "value": year},
+                {"key": "letter", "name": "字母", "value": self._letter_filter()},
+            ]
+        }
+
+    def _letter_filter(self):
+        return [{"n": "全部", "v": ""}] + [{"n": c, "v": c} for c in "ABCDEFGHIJKLMNOPQRSTUVWXYZ"] + [{"n": "0-9", "v": "0-9"}]
+
+    def _build_type_filters(self, tid, area, year, lang, sort):
+        if tid == "2":
+            return [
+                {"key": "class", "name": "类型", "value": [{"n": "全部", "v": "2"}, {"n": "国产剧", "v": "13"}, {"n": "日韩剧", "v": "15"}, {"n": "海外剧", "v": "16"}]},
+                {"key": "area", "name": "地区", "value": area},
+                {"key": "genre", "name": "剧情", "value": [{"n": v[0], "v": v[1]} for v in [("全部", ""), ("古装", "古装"), ("战争", "战争"), ("青春偶像", "青春偶像"), ("喜剧", "喜剧"), ("家庭", "家庭"), ("犯罪", "犯罪"), ("动作", "动作"), ("奇幻", "奇幻"), ("剧情", "剧情"), ("历史", "历史"), ("经典", "经典"), ("乡村", "乡村"), ("情景", "情景"), ("商战", "商战"), ("网剧", "网剧"), ("其他", "其他")]]},
+                {"key": "year", "name": "年份", "value": year},
+                {"key": "lang", "name": "语言", "value": lang},
+                {"key": "letter", "name": "字母", "value": self._letter_filter()},
+                {"key": "sort", "name": "排序", "value": sort},
+            ]
+        # 类似地为其他类型添加（已简化，实际可根据需要扩展）
+        return [
+            {"key": "class", "name": "类型", "value": [{"n": "全部", "v": tid}]},
+            {"key": "area", "name": "地区", "value": area},
+            {"key": "year", "name": "年份", "value": year},
+            {"key": "lang", "name": "语言", "value": lang},
+            {"key": "letter", "name": "字母", "value": self._letter_filter()},
+            {"key": "sort", "name": "排序", "value": sort},
         ]
-    }
-}
-const OtherFilters = [{
-        "key": "area",
-        "name": "地区",
-        "value": [{
-                "n": "全部",
-                "v": ""
-            }, {
-                "n": "大陆",
-                "v": "大陆"
-            }, {
-                "n": "香港",
-                "v": "香港"
-            },
-            {
-                "n": "台湾",
-                "v": "台湾"
-            }, {
-                "n": "美国",
-                "v": "美国"
-            }, {
-                "n": "韩国",
-                "v": "韩国"
-            },
-            {
-                "n": "日本",
-                "v": "日本"
-            }, {
-                "n": "法国",
-                "v": "法国"
-            }, {
-                "n": "新加坡",
-                "v": "新加坡"
-            },
-            {
-                "n": "马来西亚",
-                "v": "马来西亚"
-            }, {
-                "n": "印度",
-                "v": "印度"
-            }, {
-                "n": "英国",
-                "v": "英国"
-            },
-            {
-                "n": "德国",
-                "v": "德国"
-            }, {
-                "n": "加拿大",
-                "v": "加拿大"
-            }, {
-                "n": "西班牙",
-                "v": "西班牙"
-            },
-            {
-                "n": "俄罗斯",
-                "v": "俄罗斯"
-            }, {
-                "n": "其他",
-                "v": "其他"
+
+    def homeVideoContent(self):
+        html = self._fetch('/')
+        return {"list": self._parse_video_list(html)}
+
+    def categoryContent(self, tid, pg, filter, extend):
+        pg = int(pg) if pg else 1
+        if tid.startswith('/label'):
+            url = f"{tid}/page/{pg}.html"
+        else:
+            # 构造筛选URL（根据站点规则调整）
+            params = {
+                'class': extend.get('class', tid),
+                'area': extend.get('area', ''),
+                'year': extend.get('year', ''),
+                'lang': extend.get('lang', ''),
+                'letter': extend.get('letter', ''),
+                'sort': extend.get('sort', 'time')
             }
-        ]
-    },
-    getYearFilter(),
-    {
-        "key": "lang",
-        "name": "语言",
-        "value": [{
-                "n": "全部",
-                "v": ""
-            }, {
-                "n": "国语",
-                "v": "国语"
-            }, {
-                "n": "英语",
-                "v": "英语"
-            },
-            {
-                "n": "粤语",
-                "v": "粤语"
-            }, {
-                "n": "闽南语",
-                "v": "闽南语"
-            }, {
-                "n": "韩语",
-                "v": "韩语"
-            },
-            {
-                "n": "日语",
-                "v": "日语"
-            }, {
-                "n": "其他",
-                "v": "其他"
-            }
-        ]
-    },
-    getLetterFilter()
-];
-const myFilters = {
-    "2": [{
-            key: "type",
-            "name": "类型",
-            value: [{
-                    "n": "全部",
-                    "v": "2"
-                },
-                {
-                    "n": "国产剧",
-                    "v": "13"
-                },
-                {
-                    "n": "日韩剧",
-                    "v": "15"
-                },
-                {
-                    "n": "海外剧",
-                    "v": "16"
-                },
-            ]
-        },
-        {
-            "key": "class",
-            "name": "剧情",
-            "value": [{
-                    "n": "全部",
-                    "v": ""
-                }, {
-                    "n": "喜剧",
-                    "v": "喜剧"
-                }, {
-                    "n": "战争",
-                    "v": "战争"
-                },
-                {
-                    "n": "青春偶像",
-                    "v": "青春偶像"
-                }, {
-                    "n": "爱情",
-                    "v": "爱情"
-                }, {
-                    "n": "家庭",
-                    "v": "家庭"
-                },
-                {
-                    "n": "犯罪",
-                    "v": "犯罪"
-                }, {
-                    "n": "动作",
-                    "v": "动作"
-                }, {
-                    "n": "奇幻",
-                    "v": "奇幻"
-                },
-                {
-                    "n": "剧情",
-                    "v": "剧情"
-                }, {
-                    "n": "历史",
-                    "v": "历史"
-                }, {
-                    "n": "经典",
-                    "v": "经典"
-                },
-                {
-                    "n": "乡村",
-                    "v": "乡村"
-                }, {
-                    "n": "情景",
-                    "v": "情景"
-                }, {
-                    "n": "商战",
-                    "v": "商战"
-                },
-                {
-                    "n": "网剧",
-                    "v": "网剧"
-                }, {
-                    "n": "其他",
-                    "v": "其他"
-                }
-            ]
-        },
-        ...OtherFilters
-    ],
-    "1": [{
-            "key": "type",
-            "name": "类型",
-            value: [{
-                    "n": "全部",
-                    "v": "1"
-                },
-                {
-                    "n": "动作片",
-                    "v": "6"
-                },
-                {
-                    "n": "爱情片",
-                    "v": "7"
-                },
-                {
-                    "n": "恐怖片",
-                    "v": "8"
-                },
-                {
-                    "n": "科幻片",
-                    "v": "9"
-                },
-                {
-                    "n": "喜剧片",
-                    "v": "10"
-                },
-                {
-                    "n": "剧情片",
-                    "v": "11"
-                }
-            ]
-        },
-        {
-            "key": "class",
-            "name": "剧情",
-            "value": [{
-                    "n": "全部",
-                    "v": ""
-                },
-                {
-                    "n": "爱情",
-                    "v": "爱情"
-                },
-                {
-                    "n": "喜剧",
-                    "v": "喜剧"
-                },
-                {
-                    "n": "恐怖",
-                    "v": "恐怖"
-                },
-                {
-                    "n": "动作",
-                    "v": "动作"
-                },
-                {
-                    "n": "科幻",
-                    "v": "科幻"
-                },
-                {
-                    "n": "剧情",
-                    "v": "剧情"
-                },
-                {
-                    "n": "战争",
-                    "v": "战争"
-                },
-                {
-                    "n": "犯罪",
-                    "v": "犯罪"
-                },
-                {
-                    "n": "动画",
-                    "v": "动画"
-                },
-                {
-                    "n": "奇幻",
-                    "v": "奇幻"
-                },
-                {
-                    "n": "悬疑",
-                    "v": "悬疑"
-                },
-                {
-                    "n": "惊悚",
-                    "v": "惊悚"
-                },
-                {
-                    "n": "冒险",
-                    "v": "冒险"
-                },
-                {
-                    "n": "经典",
-                    "v": "经典"
-                },
-                {
-                    "n": "青春",
-                    "v": "青春"
-                },
-                {
-                    "n": "文艺",
-                    "v": "文艺"
-                },
-                {
-                    "n": "微电影",
-                    "v": "微电影"
-                },
-                {
-                    "n": "历史",
-                    "v": "历史"
-                },
-                {
-                    "n": "运动",
-                    "v": "运动"
-                },
-                {
-                    "n": "灾难",
-                    "v": "灾难"
-                },
-                {
-                    "n": "儿童",
-                    "v": "儿童"
-                },
-                {
-                    "n": "网络电影",
-                    "v": "网络电影"
-                }
-            ]
-        },
-        ...OtherFilters
-    ],
-    "4": [{
-            "key": "type",
-            "name": "类型",
-            "value": [{
-                    "n": "全部",
-                    "v": "4"
-                },
-                {
-                    "n": "国产动漫",
-                    "v": "25"
-                },
-                {
-                    "n": "日韩动漫",
-                    "v": "26"
-                },
-            ]
-        },
-        {
-            "key": "class",
-            "name": "剧情",
-            "value": [{
-                    "n": "全部",
-                    "v": ""
-                },
-                {
-                    "n": "情感",
-                    "v": "情感"
-                },
-                {
-                    "n": "科幻",
-                    "v": "科幻"
-                },
-                {
-                    "n": "热血",
-                    "v": "热血"
-                },
-                {
-                    "n": "推理",
-                    "v": "推理"
-                },
-                {
-                    "n": "搞笑",
-                    "v": "搞笑"
-                },
-                {
-                    "n": "冒险",
-                    "v": "冒险"
-                },
-                {
-                    "n": "校园",
-                    "v": "校园"
-                },
-                {
-                    "n": "动作",
-                    "v": "动作"
-                },
-                {
-                    "n": "机战",
-                    "v": "机战"
-                },
-                {
-                    "n": "运动",
-                    "v": "运动"
-                },
-                {
-                    "n": "战争",
-                    "v": "战争"
-                },
-                {
-                    "n": "少年",
-                    "v": "少年"
-                },
-                {
-                    "n": "少女",
-                    "v": "少女"
-                },
-                {
-                    "n": "社会",
-                    "v": "社会"
-                },
-                {
-                    "n": "原创",
-                    "v": "原创"
-                },
-                {
-                    "n": "亲子",
-                    "v": "亲子"
-                },
-                {
-                    "n": "智斗",
-                    "v": "智斗"
-                },
-                {
-                    "n": "励志",
-                    "v": "励志"
-                },
-                {
-                    "n": "其他",
-                    "v": "其他"
-                }
-            ]
-        },
-        ...OtherFilters
-    ],
-    "3": [{
-            "key": "type",
-            "name": "类型",
-            value: [{
-                    "n": "全部",
-                    "v": "3"
-                },
-                {
-                    "n": "大陆综艺",
-                    "v": "21"
-                },
-                {
-                    "n": "日韩综艺",
-                    "v": "22"
-                },
-            ]
-        },
-        {
-            "key": "class",
-            "name": "剧情",
-            "value": [{
-                    "n": "全部",
-                    "v": ""
-                },
-                {
-                    "n": "选秀",
-                    "v": "选秀"
-                },
-                {
-                    "n": "情感",
-                    "v": "情感"
-                },
-                {
-                    "n": "访谈",
-                    "v": "访谈"
-                },
-                {
-                    "n": "播报",
-                    "v": "播报"
-                },
-                {
-                    "n": "旅游",
-                    "v": "旅游"
-                },
-                {
-                    "n": "音乐",
-                    "v": "音乐"
-                },
-                {
-                    "n": "美食",
-                    "v": "美食"
-                },
-                {
-                    "n": "纪实",
-                    "v": "纪实"
-                },
-                {
-                    "n": "舞蹈",
-                    "v": "舞蹈"
-                },
-                {
-                    "n": "生活",
-                    "v": "生活"
-                },
-                {
-                    "n": "游戏互动",
-                    "v": "游戏互动"
-                },
-                {
-                    "n": "财经",
-                    "v": "财经"
-                },
-                {
-                    "n": "脱口秀",
-                    "v": "脱口秀"
-                }
-            ]
-        },
-        ...OtherFilters
-    ],
-    "5": [
-        getYearFilter(),
-        getLetterFilter()
-    ],
-};
-async function home(filter) {
-    return JSON.stringify({
-        class: [{
-                type_id: "/label/qq",
-                type_name: "腾讯精选"
-            },
-            {
-                type_id: "/label/bli",
-                type_name: "B站精选"
-            },
-            {
-                type_id: "/label/youku",
-                type_name: "优酷精选"
-            },
-            {
-                type_id: "2",
-                type_name: "电视剧",
-            },
-            {
-                type_id: "1",
-                type_name: "电影"
-            },
-            {
-                type_id: "4",
-                type_name: "动漫"
-            },
-            {
-                type_id: "3",
-                type_name: "综艺"
-            },
-            {
-                type_id: "5",
-                type_name: "热门短剧"
-            }
+            url = f"/cupfox-list/{params['class']}-{params['area']}-0-{extend.get('genre','')}-{params['lang']}-{params['letter']}-{params['sort']}-0-{pg}-0-0-{params['year']}.html"
 
+        html = self._fetch(url)
+        items = self._parse_video_list(html)
 
-        ],
-        filters: myFilters
-    });
-}
-async function category(tid, pg, filter, extend) {
-    pg = pg || 1;
-    let type = extend.type || tid;
-    const isLanel = tid.startsWith("/label");
-    let url = "";
-    const typePrefix = appConfig.siteUrl === 'https://www.gzwlr.com' ? "list" : "cupfox-list";
-    if (isLanel) {
-        url = appConfig.siteUrl + tid + `/page/${pg}.html`;
-    } else {
-        let classVal = extend.class || '';
-        let areaVal = extend.area || '';
-        let langVal = extend.lang || '';
-        let letterVal = extend.letter || '';
-        let orderVal = extend.orderBy || '';
-        let yearVal = extend.year || '';
-        url = `\( {appConfig.siteUrl}/ \){typePrefix}/\( {type}- \){areaVal}-\( {''}- \){classVal}-\( {langVal}- \){letterVal}-\( {orderVal}- \){''}-\( {pg}- \){''}-\( {''}- \){yearVal}.html`;
-    }
-    const html = (await req(url)).content;
-    const $ = cheerio.load(html);
-    let list = [];
-    $(".public-list-div.public-list-bj").each(function(index, el) {
-        let vod_id = $(el).find("a.public-list-exp").attr("href");
-        let vod_name = $(el).find("a.public-list-exp").attr("title").trim();
-        let _4k = $(el).find(".public-prt-g").text().trim()
-        let vod_pic = $(el).find(".public-list-exp img").attr("data-src");
-        let upto = $(el).find(".ft2").text().trim();
-        let vod_remarks = _4k + ' ' + upto
-        list.push({
-            vod_id,
-            vod_name,
-            vod_pic,
-            vod_remarks
-        });
-    });
-    const pageStr = $('.page-tip').text().trim()
-    const pagecount = pageStr.match(/\d+\/(\d+)页/)?.[1] || 1
-    return JSON.stringify({
-        list,
-        pagecount
-    });
-}
-async function search(wd, quick, page) {
-    if (page >= 2) {
-        return JSON.stringify({
-            list: [],
-            pagecount: 1
-        });
-    }
-    try {
-        const searchPrefex = appConfig.siteUrl === 'https://www.gzwlr.com' ? "search" : "cupfox-search";
-        const url = `\( {appConfig.siteUrl}/ \){searchPrefex}/-------------.html?wd=${wd}`;
-        const html = (await req(url)).content;
-        const $ = cheerio.load(html);
-        let list = [];
-        $('.search-box').each((i, el) => {
-            const vod_id = $(el).find(".thumb-txt a").attr('href') || '';
-            const vod_name = $(el).find(".thumb-txt a").text().trim()
-            const vod_pic = $(el).find('.left img').attr('data-src') || '';
-            const vod_remarks = $(el).find('.public-list-prb').text().trim()
-            list.push({
-                vod_id,
-                vod_name,
-                vod_pic,
-                vod_remarks
-            });
-        })
-        return JSON.stringify({
-            list: list,
-            pagecount: 1
-        });
-    } catch (e) {
-        console.error("❌ search 遇到内部崩溃 =", e.message);
-        return JSON.stringify({
-            list: []
-        });
-    }
-}
-async function detail(id) {
-    try {
-        const videoId = id;
-        const url = appConfig.siteUrl + videoId;
-        const response = await req(url);
-        const html = response ? response.content : '';
-        const $ = cheerio.load(html);
+        # 简单翻页逻辑
+        page_count = pg + 1 if len(items) >= 20 else pg
 
-        const vod_name = $('.slide-info-title').text().trim();
-        const imgSrc = $('.detail-pic img').attr("data-src") || '';
-        const vod_pic = imgSrc ? (imgSrc.startsWith('http') ? imgSrc : appConfig.siteUrl + imgSrc) : '';
-        const vod_actor = $('.detail-info .slide-info').eq(2).text().replace(/主演：\s*/, '').trim();
-        const vod_remarks = $('.detail-info .slide-info').eq(4).text().replace(/连载\s*:\s*/, '').trim();
-        const vod_content = ''+$('#height_limit').text().trim();
-
-
-        let rawLines = [];
-        let rawPlaylists = [];
-        $('.swiper-slide').each((i, el) => {
-            const lineName = $(el).clone().find('i, span').remove().end().text().trim();
-            rawLines.push(lineName);
-        });
-        $('.anthology-list-box').each((lineIndex, poolEl) => {
-            const episodes = [];
-            $(poolEl).find('a').each((episodeIndex, epEl) => {
-                const name = $(epEl).text().trim();
-                const href = $(epEl).attr('href') || '';
-                if (name && href) {
-                    episodes.push(`${name}\$${href}`);
-                }
-            });
-            rawPlaylists.push(episodes);
-        });
-
-
-        let targetLineIdx = -1;
-
-        for (let i = 0; i < rawLines.length; i++) {
-            const name = rawLines[i];
-            const eps = rawPlaylists[i];
-            if (name.includes("自建4k") && eps.length > 0) {
-                targetLineIdx = i;
-                break;
-            }
+        return {
+            "list": items,
+            "page": pg,
+            "pagecount": page_count,
+            "limit": 24
         }
 
-        if (targetLineIdx === -1 && rawLines.length > 0) {
-            targetLineIdx = 0;
+    def searchContent(self, key, quick):
+        url = f"/cupfox-search/-------------.html?wd={urllib.parse.quote(key)}"
+        html = self._fetch(url)
+        return {"list": self._parse_video_list(html)}
+
+    def detailContent(self, ids):
+        # TODO: 根据实际站点详情页结构实现
+        # 此处为占位，建议根据需要补充解析逻辑
+        url = ids[0] if isinstance(ids, list) else ids
+        html = self._fetch(url)
+        soup = BeautifulSoup(html, 'html.parser')
+        
+        title = soup.select_one('.slide-info-title')
+        vod_name = title.get_text(strip=True) if title else ''
+        
+        # 其他字段可继续补充...
+        return {
+            "list": [{
+                "vod_id": url,
+                "vod_name": vod_name,
+                "vod_pic": "",
+                "vod_remarks": "",
+                "vod_content": "",
+                "vod_play_from": "枫叶",
+                "vod_play_url": ""  # 需要进一步解析播放链接
+            }]
         }
 
-        let finalLines = [];
-        let finalPlaylists = [];
-        if (targetLineIdx !== -1) {
-            finalLines.push("苹果");
-            finalPlaylists.push(rawPlaylists[targetLineIdx]);
+    def playerContent(self, flag, id, vipFlags):
+        # 播放链接解析
+        return {
+            "parse": 0,
+            "url": self.host + id if not id.startswith('http') else id,
+            "header": self.headers
         }
-
-
-        const {
-            vod_play_from,
-            vod_play_url
-        } = buildVodPlayData(finalLines, finalPlaylists, true);
-        const vod = {
-            vod_id: videoId,
-            vod_name,
-            vod_pic,
-            vod_actor,
-            vod_remarks,
-            vod_content,
-            vod_play_from,
-            vod_play_url
-        };
-        return JSON.stringify({
-            list: [vod]
-        });
-    } catch (error) {
-        console.error(`解析详情页异常 [ID: ${id}]:`, error);
-        return JSON.stringify({
-            list: []
-        });
-    }
-}
-
-function buildVodPlayData(lines, playlists, shouldReverse = true) {
-    const processedPlaylists = playlists.map(eps => {
-        if (shouldReverse) {
-            eps.reverse();
-        }
-        return eps.join('#');
-    });
-    return {
-        vod_play_from: lines.filter(Boolean).join('$$$'),
-        vod_play_url: processedPlaylists.join('$$$')
-    };
-}
-
-function isDirectUrl(url) {
-    return url.startsWith('http') || url.endsWith(".m3u8") || url.endsWith(".mp4");
-}
-async function parsePLayUrl(is2kLine, url) {
-    const parseApiUrl = is2kLine ? "https://zzrs.mfdyvip.com/player/" : "https://fgsrg.hzqingshan.com/player/"
-    try {
-        const html = (await req(`\( {parseApiUrl}?url= \){url}`, {
-            method: 'GET',
-            headers: Headers
-        })).content
-        const $ = cheerio.load(html)
-        const token = $('#player-data').attr('data-te');
-        console.log("✅ 成功获取到 token:", token);
-        let playData = await req(`${parseApiUrl}/mplayer.php`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            data: {
-                url: url,
-                token: token,
-            }
-        }).content
-        playData = JSON.parse(playData)
-        return playData.url
-    } catch (e) {
-        console.error("❌ play 遇到内部错误 =", e);
-        return "";
-    }
-}
-async function play(flag, id, flags) {
-    try {
-        const html = (await req(`\( {appConfig.siteUrl} \){id}`)).content;
-        const url = getPlayUrl(html)
-        if (isDirectUrl(url)) {
-            return JSON.stringify({
-                parse: 0,
-                Header: {
-                    "User-Agent": UA
-                },
-                url,
-            });
-        }
-        const is2kLine = flag.includes('2k')
-        const playUrl = await parsePLayUrl(is2kLine, url)
-        return JSON.stringify({
-            parse: 0,
-            Header: {
-                "User-Agent": UA
-            },
-            url: playUrl
-        });
-    } catch (e) {
-        console.error("❌ play 遇到内部崩溃 =", e);
-        return JSON.stringify({
-            parse: 0,
-            url: ""
-        });
-    }
-}
-
-function getPlayUrl(html) {
-    const match = html.match(/var\s+player_aaaa[\s\S]*?"url"\s*:\s*"([^"]+)"/);
-    let url = match ? match[1] : '';
-    url = url.replace(/\\/g, '');
-    return url;
-}
-export default {
-    init,
-    home,
-    category,
-    detail,
-    search,
-    play
-};
