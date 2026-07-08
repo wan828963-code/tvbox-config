@@ -76,6 +76,17 @@
             "ext": ""
         },
         {
+            "key": "裤佬枫叶4K",
+            "name": "👖裤佬丨枫叶丨4K",
+            "type": 3,
+            "api": "https://gh-proxy.org/https://raw.githubusercontent.com/wan828963-code/tvbox-config/refs/heads/main/fengye.js",
+            "searchable": 1,
+            "quickSearch": 1,
+            "filterable": 1,
+            "changeable": 1,
+            "playable": 1
+        },
+        {
             "key": "裤佬世界杯直播",
             "name": "⚽云霄丨世界杯丨直播",
             "type": 1,
