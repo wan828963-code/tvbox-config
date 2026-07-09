@@ -1,11 +1,17 @@
 {
-    "key": "云霄枫叶测试",
-    "name": "☁云霄免扫影院",
-    "type": 3,
-    "api": "https://gh-proxy.com/https://raw.githubusercontent.com/wan828963-code/tvbox-config/main/fengye.js",
-    "searchable": 0,
-    "quickSearch": 0,
-    "filterable": 0,
-    "changeable": 1,
-    "playable": 1
+    "wallpaper": "https://789.st/zLP7cyj",
+    "spider": "https://zl.wpscdn.cn/2026/06/20/space_img/1222fd9e-d07d-4174-8157-21d3ac5db43a.png;md5;9b4f09c5743cbefd26c7991134fd9708",
+    "sites": [
+        {
+            "key": "云霄枫叶测试",
+            "name": "☁云霄免扫影院",
+            "type": 3,
+            "api": "https://gh-proxy.com/https://raw.githubusercontent.com/wan828963-code/tvbox-config/main/fengye.js",
+            "searchable": 1,
+            "quickSearch": 1,
+            "filterable": 1,
+            "changeable": 1,
+            "playable": 1
+        }
+    ]
 }
