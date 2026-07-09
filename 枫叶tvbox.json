@@ -1,0 +1,11 @@
+{
+    "key": "云霄枫叶测试",
+    "name": "☁云霄免扫影院",
+    "type": 3,
+    "api": "https://gh-proxy.com/https://raw.githubusercontent.com/wan828963-code/tvbox-config/main/fengye.js",
+    "searchable": 0,
+    "quickSearch": 0,
+    "filterable": 0,
+    "changeable": 1,
+    "playable": 1
+}
