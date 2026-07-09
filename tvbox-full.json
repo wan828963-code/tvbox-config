@@ -50,6 +50,7 @@
         },
         {
             "name": "☁JackTV直播{翻}",
+            "type": 0,
             "url": "https://php.946985.filegear-sg.me/jackTV.m3u"
         },
         {
@@ -75,16 +76,16 @@
             "filterable": 1,
             "ext": ""
         },
-    {
-      "key" : "裤佬极影4K",
-      "name" : "👖裤佬丨极影丨4K",
-      "type" : 3,
-      "api" : "https://dogpan.com/f/MjZntz/4K免扫码.js",
-      "searchable" : 1,
-      "quickSearch" : 1,
-      "filterable" : 1,
-      "ext" : "http://cmsyun2.qijiyun.vip/api.php/app/"
-    },
+        {
+            "key": "裤佬极影4K",
+            "name": "👖裤佬丨极影丨4K",
+            "type": 3,
+            "api": "https://dogpan.com/f/MjZntz/4K免扫码.js",
+            "searchable": 1,
+            "quickSearch": 1,
+            "filterable": 1,
+            "ext": "http://cmsyun2.qijiyun.vip/api.php/app/"
+        },
         {
             "key": "裤佬世界杯直播",
             "name": "⚽云霄丨世界杯丨直播",
@@ -113,12 +114,12 @@
             "searchable": 1,
             "ext": "https://gh-proxy.org/https://raw.githubusercontent.com/Jsnzkpg/Jsnzkpg/refs/heads/Jsnzkpg/stymei/alist.json"
         },
-	      	{
-			"key": "fY",
-			"name": "☁云霄免扫影院",
-			"type": 3,
-			"api": "https://ghfast.top/https://raw.githubusercontent.com/FGBLH/HKL/refs/heads/main/py/枫叶影院.py"
-	       	},
+        {
+            "key": "fY",
+            "name": "☁云霄免扫影院",
+            "type": 3,
+            "api": "https://ghfast.top/https://raw.githubusercontent.com/FGBLH/HKL/refs/heads/main/py/枫叶影院.py"
+        },
         {
             "key": "裤佬电视直播",
             "name": "☁云霄丨电视丨直播",
@@ -201,8 +202,8 @@
             "ext": "http://rihou.cc:88/js/蜻蜓FM.js"
         },
         {
-            "name": "☁云霄丨瓜子丨影视",
             "key": "Guazi",
+            "name": "☁云霄丨瓜子丨影视",
             "type": 3,
             "api": "csp_GuaziAmns",
             "searchable": 1,
@@ -220,8 +221,8 @@
             "api": "https://mpimg.cn/down.php/055f3cda37e9db69ab09a0857e7f9db8.py"
         },
         {
-            "name": "☁云霄丨韩剧丨影视",
             "key": "Hxq",
+            "name": "☁云霄丨韩剧丨影视",
             "type": 3,
             "api": "csp_HxqAmns",
             "searchable": 1,
@@ -229,8 +230,8 @@
             "changeable": 0
         },
         {
-            "name": "☁云霄丨夏天丨影视",
             "key": "NewGrV2",
+            "name": "☁云霄丨夏天丨影视",
             "type": 3,
             "api": "csp_NewGrV2Amns",
             "searchable": 1,
@@ -239,8 +240,8 @@
             "ext": "e5f15714a2413f05151fea686450950ace809216b88f37b7b1fb4f1ce80eff9fab1b6be3fd1f9df9a5a915365aefecb314d297b5e1747337c20236c3637c2aeaebfce371e9053be3898bb20a9ef20bbf13173fb2ad38b4474346328a3a354451a1b5f96c490cc09840a195bc498f9e11499df11b3946e58e4c705a8457521ed34c879c458a9b27e487496c7a63a7ca8b34133bca4943b0019d982462cc22294e7c4ab447899b0e8bc667c7e635e8291fa544e8e28d8b16b8b702912f2d5ec561e1fb8667cc44bef7cae73f5022c94518cb7f0845d772d44944a88ff71d9a562a6204729a8f1b00c81ba195664482e756859f12048f73e986ad3bb6584935696dff959b0f82055f23d94f6a935103b574a98d54079a0be6647fcaca4db0d177ac3004eb51819a8e539646a141"
         },
         {
-            "name": "☁云霄丨橘子丨影视",
             "key": "Woshinidie",
+            "name": "☁云霄丨橘子丨影视",
             "type": 3,
             "jar": "https://zl.wpscdn.cn/2026/06/01/space_img/8ec1dbc0-101c-410c-bfe1-0b47a2e6d54c.png;md5;76d835a5c630383e9fd851399579220c",
             "api": "csp_Woshinidie",
@@ -258,8 +259,8 @@
             }
         },
         {
-            "name": "☁云霄丨快速丨影视",
             "key": "YIys",
+            "name": "☁云霄丨快速丨影视",
             "type": 3,
             "api": "csp_YIysAmns",
             "searchable": 1,
@@ -267,8 +268,8 @@
             "changeable": 0
         },
         {
-            "name": "☁云霄丨杜比丨影视",
             "key": "Dubk",
+            "name": "☁云霄丨杜比丨影视",
             "type": 3,
             "api": "csp_DubkAmns",
             "searchable": 1,
@@ -531,29 +532,29 @@
         {
             "key": "裤佬猎手PY",
             "name": "☁云霄丨猎手丨PY",
+            "type": 3,
             "api": "https://mpimg.cn/down.php/60fab5ff33f0b0fd88f099ae3be708bf.py",
             "filterable": 1,
             "quickSearch": 1,
-            "searchable": 1,
-            "type": 3
+            "searchable": 1
         },
         {
             "key": "裤佬芒果PY",
             "name": "☁云霄丨芒果丨PY",
+            "type": 3,
             "api": "https://mpimg.cn/down.php/643d3f9a0b601f25d3e372eeb66e82a5.py",
             "filterable": 1,
             "quickSearch": 1,
-            "searchable": 1,
-            "type": 3
+            "searchable": 1
         },
         {
             "key": "裤佬兄弟PY",
             "name": "☁云霄丨兄弟丨PY",
+            "type": 3,
             "api": "https://mpimg.cn/down.php/b1cdcf76574a0cb24d5b937d46458cdf.py",
             "filterable": 1,
             "quickSearch": 1,
-            "searchable": 1,
-            "type": 3
+            "searchable": 1
         },
         {
             "key": "裤佬央视PY",
@@ -627,8 +628,8 @@
             "api": "http://jiduo.3116598.xyz/PHP/pkty.php"
         },
         {
-            "name": "☁云霄丨瓜子丨体育",
             "key": "GuaziLive",
+            "name": "☁云霄丨瓜子丨体育",
             "type": 3,
             "api": "csp_GuaziLiveAmns",
             "searchable": 0,
@@ -637,8 +638,8 @@
             "ext": "https://api.bmjb2mk7.com,https://api.46d5umpk.com,https://api.tkfupxqu.com,https://api.5h5hbfhh.com,https://api.qchyzkww.com,https://api.cjxxpgkq.com,https://api.zejzeu7p.com"
         },
         {
-            "name": "☁云霄丨飞球丨体育",
             "key": "FeiqLive",
+            "name": "☁云霄丨飞球丨体育",
             "type": 3,
             "api": "csp_FeiqLiveAmns",
             "searchable": 1,
@@ -646,8 +647,8 @@
             "changeable": 0
         },
         {
-            "name": "☁云霄丨88丨体育",
             "key": "BbkqLive",
+            "name": "☁云霄丨88丨体育",
             "type": 3,
             "api": "csp_BbkqLiveAmns",
             "searchable": 1,
@@ -656,8 +657,8 @@
             "ext": "https://www.88kanqiu.app,https://www.88kanqiu.la,https://www.88kanqiu.one,https://www.88kanqiu.ooo,https://www.88kanqiu.pw"
         },
         {
-            "name": "☁云霄丨咖啡丨体育",
             "key": "KafLive",
+            "name": "☁云霄丨咖啡丨体育",
             "type": 3,
             "api": "csp_KafLiveAmns",
             "searchable": 0,
