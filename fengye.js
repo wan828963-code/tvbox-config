@@ -1,113 +1,158 @@
-# -*- coding: utf-8 -*-
-import re, urllib.parse
-import json
-from bs4 import BeautifulSoup
-import requests
-from base.spider import Spider as BaseSpider
+/**
+ * 枫叶影院 TVBox/DRPY 爬虫脚本
+ * 适用版本: TVBox/本地/远程自建自用
+ */
 
+var maccms = {
+    url: 'http://www.maihaolian.com', // 替换为你当前可用的前端镜像或原站主页
+};
 
-class Spider(BaseSpider):
-    def init(self, extend=""):
-        self.host = "https://maihaolian.com"
-        self.headers = {
-            "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 16_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.0 Mobile/15E148 Safari/604.1",
-            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-            "Accept-Language": "zh-CN,zh;q=0.9",
+// 1. 初始化基本配置
+function init(ext) {
+    console.log("枫叶影院初始化完成");
+}
+
+// 2. 首页/首屏推荐数据解析 (对应你提供的 HTML 主页)
+function home(filter) {
+    var classes = [
+        {"type_id": "qq", "type_name": "腾讯SVIP"},
+        {"type_id": "youku", "type_name": "优酷SVIP"},
+        {"type_id": "bli", "type_name": "B站SVIP"},
+        {"type_id": "duanju", "type_name": "红果短剧"}
+    ];
+    
+    // 针对你给出的 HTML 代码进行结构化模拟输出
+    var list = [
+        {
+            "vod_id": "50767",
+            "vod_name": "藏海传",
+            "vod_pic": "https://liangcang-material.alicdn.com/prod/upload/25e514af8b4b489886470fac8aae4614.webp",
+            "vod_remarks": "更新至40集"
+        },
+        {
+            "vod_id": "92941",
+            "vod_name": "斩神之凡尘神域Ⅱ",
+            "vod_pic": "https://emage.hzqingshan.com/upload/vod/20260625-1/083d2636c750ca5f3bff2b4a77e67247.jpg",
+            "vod_remarks": "更新至05集"
+        },
+        {
+            "vod_id": "89442",
+            "vod_name": "盘龙",
+            "vod_pic": "https://emage.hzqingshan.com/upload/vod/20260430-1/977e38e19be6cabe3c3351d95ae438b2.webp",
+            "vod_remarks": "更新至13集"
+        },
+        {
+            "vod_id": "76260",
+            "vod_name": "京城奇探",
+            "vod_pic": "https://emage.hzqingshan.com/upload/vod/20251114-1/c525d3d67c3c609d0e777ec6985df762.jpg",
+            "vod_remarks": "更新至11集"
         }
+    ];
 
-    def getName(self):
-        return '枫叶影院'
+    return JSON.stringify({
+        "class": classes,
+        "list": list
+    });
+}
 
-    def homeContent(self, filter):
-        return {"class": [
-            {'type_id': "/label/qq", 'type_name': "腾讯VIP精选"},
-            {'type_id': "/label/bli", 'type_name': "B站VIP精选"},
-            {'type_id': "/label/youku", 'type_name': "优酷VIP精选"},
-            {"type_id": "5", "type_name": "红果短剧"},
-            {"type_id": "2", "type_name": "电视剧"},
-            {"type_id": "1", "type_name": "电影"},
-            {"type_id": "4", "type_name": "动漫"},
-            {"type_id": "3", "type_name": "综艺"},
-        ], "filters": self._build_filters()}
+// 3. 分类页动态解析
+function category(tid, pg, filter, extend) {
+    // 拼接真实分类网络请求
+    var targetUrl = maccms.url + '/label/' + tid + '.html';
+    if(pg > 1) {
+        targetUrl = maccms.url + '/label/' + tid + '-' + pg + '.html';
+    }
+    
+    // 这里使用 TVBox 引擎内置的 request 抓取
+    var html = request(targetUrl);
+    var vids = pdfa(html, '.public-list-box');
+    var list = [];
+    
+    vids.forEach(function(item) {
+        var id = pdfh(item, 'a.public-list-exp&&href').replace('/detail/', '').replace('.html', '');
+        var name = pdfh(item, 'a.public-list-exp&&title');
+        var pic = pdfh(item, 'img&&data-src') || pdfh(item, 'img&&src');
+        var remarks = pdfh(item, '.public-list-prb i&&text');
+        
+        list.push({
+            "vod_id": id,
+            "vod_name": name,
+            "vod_pic": pic,
+            "vod_remarks": remarks
+        });
+    });
 
-    def _build_filters(self):
-        area = [{"n": "全部", "v": ""}, {"n": "大陆", "v": "大陆"}, {"n": "香港", "v": "香港"},
-                {"n": "台湾", "v": "台湾"}, {"n": "美国", "v": "美国"}, {"n": "韩国", "v": "韩国"},
-                {"n": "日本", "v": "日本"}, {"n": "泰国", "v": "泰国"}, {"n": "新加坡", "v": "新加坡"},
-                {"n": "马来西亚", "v": "马来西亚"}, {"n": "印度", "v": "印度"}, {"n": "英国", "v": "英国"},
-                {"n": "法国", "v": "法国"}, {"n": "加拿大", "v": "加拿大"}, {"n": "西班牙", "v": "西班牙"},
-                {"n": "俄罗斯", "v": "俄罗斯"}, {"n": "其它", "v": "其它"}]
-        year = [{"n": "全部", "v": ""}, {"n": "2026", "v": "2026"}, {"n": "2025", "v": "2025"},
-                {"n": "2024", "v": "2024"}, {"n": "2023", "v": "2023"}, {"n": "2022", "v": "2022"},
-                {"n": "2021", "v": "2021"}, {"n": "2020", "v": "2020"}, {"n": "2019", "v": "2019"},
-                {"n": "2018", "v": "2018"}, {"n": "2017", "v": "2017"}, {"n": "2016", "v": "2016"},
-                {"n": "2015", "v": "2015"}, {"n": "2014", "v": "2014"}, {"n": "2013", "v": "2013"},
-                {"n": "2012", "v": "2012"}, {"n": "2011", "v": "2011"}, {"n": "2010", "v": "2010"},
-                {"n": "2009", "v": "2009"}, {"n": "2008", "v": "2008"}, {"n": "2007", "v": "2007"},
-                {"n": "2006", "v": "2006"}, {"n": "2005", "v": "2005"}, {"n": "2004", "v": "2004"}]
-        lang = [{"n": "全部", "v": ""}, {"n": "国语", "v": "国语"}, {"n": "英语", "v": "英语"},
-                {"n": "粤语", "v": "粤语"}, {"n": "闽南语", "v": "闽南语"}, {"n": "韩语", "v": "韩语"},
-                {"n": "日语", "v": "日语"}, {"n": "法语", "v": "法语"}, {"n": "德语", "v": "德语"},
-                {"n": "其它", "v": "其它"}]
-        sort = [{"n": "时间", "v": "time"}, {"n": "人气", "v": "hits"}, {"n": "评分", "v": "score"}]
-        letter = [{"n": "全部", "v": ""}, {"n": "A", "v": "A"}, {"n": "B", "v": "B"}, {"n": "C", "v": "C"},
-                  {"n": "D", "v": "D"}, {"n": "E", "v": "E"}, {"n": "F", "v": "F"}, {"n": "G", "v": "G"},
-                  {"n": "H", "v": "H"}, {"n": "I", "v": "I"}, {"n": "J", "v": "J"}, {"n": "K", "v": "K"},
-                  {"n": "L", "v": "L"}, {"n": "M", "v": "M"}, {"n": "N", "v": "N"}, {"n": "O", "v": "O"},
-                  {"n": "P", "v": "P"}, {"n": "Q", "v": "Q"}, {"n": "R", "v": "R"}, {"n": "S", "v": "S"},
-                  {"n": "T", "v": "T"}, {"n": "U", "v": "U"}, {"n": "V", "v": "V"}, {"n": "W", "v": "W"},
-                  {"n": "X", "v": "X"}, {"n": "Y", "v": "Y"}, {"n": "Z", "v": "Z"}, {"n": "0-9", "v": "0-9"}]
-        return {
-            "2": [
-                {"key": "class", "name": "类型",
-                 "value": [{"n": "全部", "v": "2"}, {"n": "国产剧", "v": "13"}, {"n": "日韩剧", "v": "15"},
-                           {"n": "海外剧", "v": "16"}]},
-                {"key": "area", "name": "地区", "value": area},
-                {"key": "genre", "name": "剧情", "value": [{"n": v[0], "v": v[1]} for v in
-                                                           [("全部", ""), ("古装", "古装"), ("战争", "战争"),
-                                                            ("青春偶像", "青春偶像"), ("喜剧", "喜剧"),
-                                                            ("家庭", "家庭"), ("犯罪", "犯罪"), ("动作", "动作"),
-                                                            ("奇幻", "奇幻"), ("剧情", "剧情"), ("历史", "历史"),
-                                                            ("经典", "经典"), ("乡村", "乡村"), ("情景", "情景"),
-                                                            ("商战", "商战"), ("网剧", "网剧"), ("其他", "其他")]]},
-                {"key": "year", "name": "年份", "value": year},
-                {"key": "lang", "name": "语言", "value": lang},
-                {"key": "letter", "name": "字母", "value": letter},
-                {"key": "sort", "name": "排序", "value": sort},
-            ],
-            "1": [
-                {"key": "class", "name": "类型",
-                 "value": [{"n": "全部", "v": "1"}, {"n": "动作片", "v": "6"}, {"n": "喜剧片", "v": "7"},
-                           {"n": "恐怖片", "v": "8"}, {"n": "科幻片", "v": "9"}, {"n": "爱情片", "v": "10"},
-                           {"n": "剧情片", "v": "11"}, {"n": "战争片", "v": "12"}, {"n": "纪录片", "v": "20"}]},
-                {"key": "area", "name": "地区", "value": area},
-                {"key": "genre", "name": "剧情", "value": [{"n": v[0], "v": v[1]} for v in
-                                                           [("全部", ""), ("喜剧", "喜剧"), ("爱情", "爱情"),
-                                                            ("恐怖", "恐怖"), ("动作", "动作"), ("科幻", "科幻"),
-                                                            ("剧情", "剧情"), ("战争", "战争"), ("警匪", "警匪"),
-                                                            ("犯罪", "犯罪"), ("动画", "动画"), ("奇幻", "奇幻"),
-                                                            ("武侠", "武侠"), ("冒险", "冒险"), ("枪战", "枪战"),
-                                                            ("悬疑", "悬疑"), ("惊悚", "惊悚"), ("经典", "经典"),
-                                                            ("青春", "青春"), ("文艺", "文艺"), ("微电影", "微电影"),
-                                                            ("古装", "古装"), ("历史", "历史"), ("运动", "运动"),
-                                                            ("农村", "农村"), ("儿童", "儿童"),
-                                                            ("网络电影", "网络电影")]]},
-                {"key": "year", "name": "年份", "value": year},
-                {"key": "lang", "name": "语言", "value": lang},
-                {"key": "letter", "name": "字母", "value": letter},
-                {"key": "sort", "name": "排序", "value": sort},
-            ],
-            "4": [
-                {"key": "class", "name": "类型",
-                 "value": [{"n": "全部", "v": "4"}, {"n": "国产动漫", "v": "25"}, {"n": "日韩动漫", "v": "26"}]},
-                {"key": "genre", "name": "剧情", "value": [{"n": v[0], "v": v[1]} for v in
-                                                           [("全部", ""), ("情感", "情感"), ("科幻", "科幻"),
-                                                            ("热血", "热血"), ("推理", "推理"), ("搞笑", "搞笑"),
-                                                            ("冒险", "冒险"), ("奇幻", "奇幻"), ("战斗", "战斗"),
-                                                            ("校园", "校园"), ("萝莉", "萝莉"), ("治愈", "治愈"),
-                                                            ("原创", "原创"), ("亲子", "亲子"), ("益智", "益智"),
-                                                            ("励志", "励志"), ("其他", "其他")]]},
-                {"key": "area", "name": "地区",
+    return JSON.stringify({
+        "page": pg,
+        "pagecount": 99,
+        "limit": 20,
+        "total": 999,
+        "list": list
+    });
+}
+
+// 4. 详情页解析 (获取选集列表)
+function detail(id) {
+    var targetUrl = maccms.url + '/detail/' + id + '.html';
+    var html = request(targetUrl);
+    
+    var name = pdfh(html, '.this-name&&text');
+    var pic = pdfh(html, '.gen-movie-img&&src');
+    
+    // 解析播放列表段落
+    var playlistHtml = pdfa(html, '.playlist&&a'); 
+    var playUrls = [];
+    playlistHtml.forEach(function(a) {
+        var pName = pdfh(a, 'text');
+        var pUrl = pdfh(a, 'href');
+        playUrls.push(pName + '$' + pUrl);
+    });
+
+    var vod = {
+        "vod_id": id,
+        "vod_name": name,
+        "vod_pic": pic,
+        "vod_play_from": "枫叶高清",
+        "vod_play_url": playUrls.join('#')
+    };
+
+    return JSON.stringify({
+        "list": [vod]
+    });
+}
+
+// 5. 搜索功能
+function search(wd, quick) {
+    var searchUrl = maccms.url + '/index.php/ajax/suggest?mid=1&wd=' + encodeURIComponent(wd);
+    var html = request(searchUrl);
+    var json = JSON.parse(html);
+    var list = [];
+    
+    json.list.forEach(function(item) {
+        list.push({
+            "vod_id": item.id,
+            "vod_name": item.name,
+            "vod_pic": item.pic,
+            "vod_remarks": item.text
+        });
+    });
+    
+    return JSON.stringify({
+        "list": list
+    });
+}
+
+// 6. 播放解析
+function play(flag, id, flags) {
+    // 枫叶影院底层通常包含免签劫持或默认M3U8直链，直接返回原生地址或调用内置解析
+    return JSON.stringify({
+        "parse": 1,
+        "url": maccms.url + id,
+        "header": {
+            "User-Agent": "Mozilla/5.0 (Linux; Android 10) AppleWebKit/537.36"
+        }
+    });
+}
                  "value": [{"n": "全部", "v": ""}, {"n": "大陆", "v": "大陆"}, {"n": "香港", "v": "香港"},
                            {"n": "台湾", "v": "台湾"}, {"n": "美国", "v": "美国"}, {"n": "韩国", "v": "韩国"},
                            {"n": "日本", "v": "日本"}, {"n": "法国", "v": "法国"}, {"n": "英国", "v": "英国"},
