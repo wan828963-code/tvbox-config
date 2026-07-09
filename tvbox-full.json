@@ -78,7 +78,7 @@
         },
         {
             "key": "裤佬极影4K",
-            "name": "👖裤佬丨极影丨4K",
+            "name": "☁云霄丨极影丨4K",
             "type": 3,
             "api": "https://dogpan.com/f/MjZntz/4K免扫码.js",
             "searchable": 1,
@@ -93,19 +93,6 @@
             "api": "https://jsnzkpg.us.ci"
         },
         {
-            "key": "裤佬网盘免扫4K",
-            "name": "☁云霄丨网盘丨免扫4K",
-            "type": 3,
-            "jar": "https://v6.gh-proxy.org/https://raw.githubusercontent.com/chitue/dongliTV/refs/heads/main/jar/dongli-spider.jar;md5;5588c621bdcf53eb857dc1cec2897a35",
-            "api": "csp_PanTa",
-            "searchable": 0,
-            "filterable": 0,
-            "changeable": 0,
-            "style": {
-                "type": "list"
-            }
-        },
-        {
             "key": "裤佬AList免扫4K",
             "name": "☁云霄丨Alist丨免扫4K",
             "type": 3,
@@ -115,10 +102,15 @@
             "ext": "https://gh-proxy.org/https://raw.githubusercontent.com/Jsnzkpg/Jsnzkpg/refs/heads/Jsnzkpg/stymei/alist.json"
         },
         {
-            "key": "fY",
+            "key": "裤佬枫叶4K",
             "name": "☁云霄免扫影院",
             "type": 3,
-            "api": "https://ghfast.top/https://raw.githubusercontent.com/FGBLH/HKL/refs/heads/main/py/枫叶影院.py"
+            "api": "https://dogpan.com/f/O7gjCv/枫叶4K.js",
+            "searchable": 1,
+            "quickSearch": 1,
+            "filterable": 1,
+            "changeable": 1,
+            "playable": 1
         },
         {
             "key": "裤佬电视直播",
