@@ -1,0 +1,26 @@
+[
+  {
+    "remarks": "SOCKS5-01",
+    "protocol": "socks",
+    "address": "67.201.59.70",
+    "port": 4145
+  },
+  {
+    "remarks": "SOCKS5-02",
+    "protocol": "socks",
+    "address": "142.54.239.1",
+    "port": 4145
+  },
+  {
+    "remarks": "SOCKS5-03",
+    "protocol": "socks",
+    "address": "84.47.150.125",
+    "port": 1080
+  },
+  {
+    "remarks": "SOCKS5-04",
+    "protocol": "socks",
+    "address": "107.181.161.81",
+    "port": 4145
+  }
+]
