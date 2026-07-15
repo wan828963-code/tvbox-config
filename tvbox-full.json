@@ -70,7 +70,8 @@
             "name": "☁云霄专属影院",
             "type": 3,
             "api": "csp_Douban",
-            "jar": "https://gh-proxy.org/https://raw.githubusercontent.com/Jsnzkpg/Jsnzkpg/Jsnzkpg/stymei/paomadeng.jar",
+            "jar": "https://cdn.jsdelivr.net/gh/wan828963-code/tvbox-config@v1.0/paomadeng.jar
+",
             "searchable": 1,
             "quickSearch": 0,
             "filterable": 1,
