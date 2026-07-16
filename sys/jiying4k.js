@@ -1,5 +1,4 @@
 import { Crypto, _ } from 'assets://js/lib/cat.js'
-
 let host = '';
 let header = {
     'User-Agent': 'okhttp/3.12.11'
@@ -7,13 +6,11 @@ let header = {
 let siteKey = '';
 let siteType = '';
 let siteJx = '';
-
 const urlPattern1 = /api\.php\/.*?\/vod/;
 const urlPattern2 = /api\.php\/.+?\.vod/;
 const parsePattern = /\/.+\\?.+=/;
 const parsePattern1 = /.*(url|v|vid|php\?id)=/;
 const parsePattern2 = /https?:\/\/[^\/]*/;
-
 const htmlVideoKeyMatch = [
     /player=new/,
     /<div id="video"/,
@@ -23,7 +20,6 @@ const htmlVideoKeyMatch = [
     /<iframe[\s\S]*?src="[^"]+?"/,
     /<video[\s\S]*?src="[^"]+?"/,
 ];
-
 const parseUrlMap = new Map();
 
 async function init(cfg) {
@@ -37,14 +33,11 @@ async function init(cfg) {
 };
 
 async function request(reqUrl, ua, timeout = 60000) {
-    // 强制utf-8编码，解决返回页面中文乱码
-    let headers = ua ? ua : {
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36',
-        'Accept-Charset': 'UTF-8'
-    };
     let res = await req(reqUrl, {
         method: 'get',
-        headers: headers,
+        headers: ua ? ua : {
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36'
+        },
         timeout: timeout,
     });
     return res.content;
@@ -52,13 +45,14 @@ async function request(reqUrl, ua, timeout = 60000) {
 
 async function home(filter) {
     try {
-        // 苹果CMS V10模式
+        // 苹果CMS V10格式检测
         if (host.includes('/vod') || host.includes('/provide/vod')) {
             const url = host;
             const json = await request(url, getHeaders(url));
             const obj = JSON.parse(json);
-            const result = { class: [] };
-            
+            const result = {
+                class: []
+            };
             if (obj.class && Array.isArray(obj.class)) {
                 for (const item of obj.class) {
                     const typeName = item.type_name;
@@ -71,14 +65,12 @@ async function home(filter) {
             }
             return JSON.stringify(result);
         } else {
-            // AppYsV2模式
+            // 原版AppYsV2格式
             let url = getCateUrl(host);
             let jsonArray = null;
-
             if (url) {
                 const json = await request(url, getHeaders(url));
                 const obj = JSON.parse(json);
-                
                 if (obj.hasOwnProperty("class") && Array.isArray(obj.class)) {
                     jsonArray = obj.class;
                 } else if (obj.hasOwnProperty("list") && Array.isArray(obj.list)) {
@@ -102,8 +94,9 @@ async function home(filter) {
                     jsonArray.push(newCls);
                 }
             }
-
-            const result = { class: [] };
+            const result = {
+                class: []
+            };
             if (jsonArray != null) {
                 for (let i = 0; i < jsonArray.length; i++) {
                     const jObj = jsonArray[i];
@@ -112,26 +105,24 @@ async function home(filter) {
                     const typeId = jObj.type_id;
                     const newCls = {
                         type_id: typeId,
-                        type_name: typeName || "",
+                        type_name: (typeName || "").replace(/资源推荐:\s*\d+\s*获取更多免费资源/g, ''),
                     };
                     const typeExtend = jObj.type_extend;
                     if (filter) {
                         const filterStr = getFilterTypes(url, typeExtend);
-
                         const filters = filterStr.split("\n");
                         const filterArr = [];
                         for (let k = (url) ? 1 : 0; k < filters.length; k++) {
                             const l = filters[k].trim();
                             if (!l) continue;
                             const oneLine = l.split("+");
-
                             let type = oneLine[0].trim();
                             let typeN = type;
-                            // 还原筛选键正常中文名称
+                            // 还原筛选字段中文
                             if (type === "class") typeN = "类型";
                             else if (type === "area") typeN = "地区";
                             else if (type === "lang") typeN = "语言";
-                            else if (type === "year") typeN = "年份";
+                            else if (type === "year") typeN = "年代";
 
                             const jOne = {
                                 key: type,
@@ -141,10 +132,12 @@ async function home(filter) {
                             for (let j = 1; j < oneLine.length; j++) {
                                 const kv = oneLine[j].trim();
                                 const sp = kv.indexOf("=");
-
                                 if (sp === -1) {
                                     if (isBan(kv)) continue;
-                                    jOne.value.push({ n: kv, v: kv });
+                                    jOne.value.push({
+                                        n: kv,
+                                        v: kv
+                                    });
                                 } else {
                                     const n = kv.substring(0, sp);
                                     if (isBan(n)) continue;
@@ -164,41 +157,42 @@ async function home(filter) {
                     result.class.push(newCls);
                 }
             }
-
             return JSON.stringify(result);
         }
     } catch (e) {
         SpiderDebug.log("分类接口错误：" + e);
     }
-    return JSON.stringify({ class: [] });
+    return JSON.stringify({
+        class: []
+    });
 }
 
 async function homeVod() {
     try {
-        // 苹果CMS V10模式
+        // 苹果CMS V10格式检测
         if (host.includes('/vod') || host.includes('/provide/vod')) {
             const url = `${host}?ac=videolist&t=1&pg=1`;
             const json = await request(url, getHeaders(url));
             const obj = JSON.parse(json);
             const videos = [];
-            
             if (obj.list && Array.isArray(obj.list)) {
                 for (const item of obj.list) {
                     videos.push({
                         vod_id: item.vod_id,
-                        vod_name: item.vod_name || "",
+                        vod_name: (item.vod_name || "").replace(/资源/g, ''),
                         vod_pic: item.vod_pic || "",
-                        vod_remarks: item.vod_remarks || ""
+                        vod_remarks: (item.vod_remarks || "").replace(/资源/g, '')
                     });
                 }
             }
-            return JSON.stringify({ list: videos });
+            return JSON.stringify({
+                list: videos
+            });
         } else {
-            // AppYsV2模式
+            // 原版AppYsV2格式
             const apiUrl = host;
             let url = getRecommendUrl(apiUrl);
             let isTV = false;
-
             if (!url) {
                 url = getCateFilterUrlPrefix(apiUrl) + "movie&page=1&area=&type=&start=";
                 isTV = true;
@@ -212,9 +206,9 @@ async function homeVod() {
                     const vObj = jsonArray[i];
                     const v = {
                         vod_id: vObj.nextlink,
-                        vod_name: vObj.title || "",
+                        vod_name: (vObj.title || "").replace(/资源/g, ''),
                         vod_pic: vObj.pic,
-                        vod_remarks: vObj.state || "",
+                        vod_remarks: (vObj.state || "").replace(/资源/g, ''),
                     };
                     videos.push(v);
                 }
@@ -233,15 +227,14 @@ async function homeVod() {
                         ids.push(vid);
                         const v = {
                             vod_id: vid,
-                            vod_name: vObj.vod_name || "",
+                            vod_name: (vObj.vod_name || "").replace(/资源/g, ''),
                             vod_pic: vObj.vod_pic,
-                            vod_remarks: vObj.vod_remarks || "",
+                            vod_remarks: (vObj.vod_remarks || "").replace(/资源/g, ''),
                         };
                         videos.push(v);
                     }
                 }
             }
-
             const result = {
                 list: videos,
             };
@@ -255,24 +248,22 @@ async function homeVod() {
 
 async function category(tid, pg, filter, extend) {
     try {
-        // 苹果CMS V10模式
+        // 苹果CMS V10格式检测
         if (host.includes('/vod') || host.includes('/provide/vod')) {
             const url = `${host}?ac=videolist&t=${tid}&pg=${pg}`;
             const json = await request(url, getHeaders(url));
             const obj = JSON.parse(json);
             const videos = [];
-            
             if (obj.list && Array.isArray(obj.list)) {
                 for (const item of obj.list) {
                     videos.push({
                         vod_id: item.vod_id,
-                        vod_name: item.vod_name || "",
+                        vod_name: (item.vod_name || "").replace(/资源/g, ''),
                         vod_pic: item.vod_pic || "",
-                        vod_remarks: item.vod_remarks || ""
+                        vod_remarks: (item.vod_remarks || "").replace(/资源/g, '')
                     });
                 }
             }
-            
             return JSON.stringify({
                 page: pg,
                 pagecount: obj.pagecount || 1,
@@ -281,7 +272,7 @@ async function category(tid, pg, filter, extend) {
                 list: videos
             });
         } else {
-            // AppYsV2模式
+            // 原版AppYsV2格式
             const apiUrl = host;
             let url = getCateFilterUrlPrefix(apiUrl) + tid + getCateFilterUrlSuffix(apiUrl);
             url = url.replace(/#PN#/g, pg);
@@ -290,27 +281,15 @@ async function category(tid, pg, filter, extend) {
             url = url.replace(/lang/g, extend?.lang ?? "");
             url = url.replace(/year/g, extend?.year ?? "");
             url = url.replace(/排序/g, extend?.排序 ?? "");
-
             const json = await request(url, getHeaders(url));
             const obj = JSON.parse(json);
-
             let totalPg = Infinity;
             try {
                 if (obj.totalpage !== undefined && typeof obj.totalpage === "number") {
                     totalPg = obj.totalpage;
-                } else if (
-                    obj.pagecount !== undefined &&
-                    typeof obj.pagecount === "number"
-                ) {
+                } else if (obj.pagecount !== undefined && typeof obj.pagecount === "number") {
                     totalPg = obj.pagecount;
-                } else if (
-                    obj.data !== undefined &&
-                    typeof obj.data === "object" &&
-                    obj.data.total !== undefined &&
-                    typeof obj.data.total === "number" &&
-                    obj.data.limit !== undefined &&
-                    typeof obj.data.limit === "number"
-                ) {
+                } else if (obj.data !== undefined && typeof obj.data === "object" && obj.data.total !== undefined && typeof obj.data.total === "number" && obj.data.limit !== undefined && typeof obj.data.limit === "number") {
                     const limit = obj.data.limit;
                     const total = obj.data.total;
                     totalPg = total % limit === 0 ? total / limit : Math.floor(total / limit) + 1;
@@ -318,28 +297,20 @@ async function category(tid, pg, filter, extend) {
             } catch (e) {
                 SpiderDebug.log(e);
             }
-
-            const jsonArray =
-                obj.list !== undefined
-                    ? obj.list
-                    : obj.data !== undefined && obj.data.list !== undefined
-                        ? obj.data.list
-                        : obj.data;
+            const jsonArray = obj.list !== undefined ? obj.list : obj.data !== undefined && obj.data.list !== undefined ? obj.data.list : obj.data;
             const videos = [];
-
             if (jsonArray !== undefined) {
                 for (let i = 0; i < jsonArray.length; i++) {
                     const vObj = jsonArray[i];
                     const v = {
                         vod_id: vObj.vod_id !== undefined ? vObj.vod_id : vObj.nextlink,
-                        vod_name: (vObj.vod_name !== undefined ? vObj.vod_name : vObj.title) || "",
+                        vod_name: ((vObj.vod_name !== undefined ? vObj.vod_name : vObj.title) || "").replace(/资源/g, ''),
                         vod_pic: vObj.vod_pic !== undefined ? vObj.vod_pic : vObj.pic,
-                        vod_remarks: (vObj.vod_remarks !== undefined ? vObj.vod_remarks : vObj.state) || "",
+                        vod_remarks: ((vObj.vod_remarks !== undefined ? vObj.vod_remarks : vObj.state) || "").replace(/资源/g, ''),
                     };
                     videos.push(v);
                 }
             }
-
             const result = {
                 page: pg,
                 pagecount: totalPg,
@@ -347,7 +318,6 @@ async function category(tid, pg, filter, extend) {
                 total: Infinity,
                 list: videos,
             };
-
             return JSON.stringify(result);
         }
     } catch (e) {
@@ -356,7 +326,7 @@ async function category(tid, pg, filter, extend) {
     return "";
 }
 
-// 播放选集文字清理函数
+// 文本替换工具：只清理资源乱码，保留分集分隔符结构不变
 function replacePlayUrlText(playUrl) {
     if (!playUrl) return playUrl;
     let result = '';
@@ -366,7 +336,6 @@ function replacePlayUrlText(playUrl) {
         let sep = '';
         let dollarPos = playUrl.indexOf('$$$', i);
         let hashPos = playUrl.indexOf('#', i);
-        
         if (dollarPos !== -1 && (hashPos === -1 || dollarPos < hashPos)) {
             found = dollarPos;
             sep = '$$$';
@@ -374,16 +343,16 @@ function replacePlayUrlText(playUrl) {
             found = hashPos;
             sep = '#';
         }
-        
         if (found !== -1) {
             let segment = playUrl.substring(i, found);
             let dollarInSegment = segment.indexOf('$');
             if (dollarInSegment > 0) {
                 let episodeName = segment.substring(0, dollarInSegment);
                 let urlPart = segment.substring(dollarInSegment);
+                episodeName = episodeName.replace(/资源/g, '');
                 result += episodeName + urlPart;
             } else {
-                result += segment;
+                result += segment.replace(/资源/g, '');
             }
             result += sep;
             i = found + sep.length;
@@ -393,9 +362,10 @@ function replacePlayUrlText(playUrl) {
             if (dollarInSegment > 0) {
                 let episodeName = segment.substring(0, dollarInSegment);
                 let urlPart = segment.substring(dollarInSegment);
+                episodeName = episodeName.replace(/资源/g, '');
                 result += episodeName + urlPart;
             } else {
-                result += segment;
+                result += segment.replace(/资源/g, '');
             }
             break;
         }
@@ -405,26 +375,26 @@ function replacePlayUrlText(playUrl) {
 
 async function detail(ids) {
     try {
-        // 苹果CMS V10模式
+        // 苹果CMS V10格式检测
         if (host.includes('/vod') || host.includes('/provide/vod')) {
             const url = `${host}?ac=detail&ids=${ids}`;
             const json = await request(url, getHeaders(url));
             const obj = JSON.parse(json);
-            const result = { list: [] };
+            const result = {
+                list: []
+            };
             const vod = {};
-            
             const data = obj.list && obj.list[0] ? obj.list[0] : {};
             vod.vod_id = data.vod_id || ids;
-            vod.vod_name = data.vod_name || "";
+            vod.vod_name = (data.vod_name || "").replace(/资源/g, '');
             vod.vod_pic = data.vod_pic || "";
-            vod.type_name = data.type_name || "";
-            vod.vod_year = data.vod_year || "";
-            vod.vod_area = data.vod_area || "";
-            vod.vod_remarks = data.vod_remarks || "";
-            vod.vod_actor = data.vod_actor || "";
-            vod.vod_director = data.vod_director || "";
-            vod.vod_content = data.vod_content || "";
-            
+            vod.type_name = (data.type_name || "").replace(/资源/g, '');
+            vod.vod_year = (data.vod_year || "").replace(/资源/g, '');
+            vod.vod_area = (data.vod_area || "").replace(/资源/g, '');
+            vod.vod_remarks = (data.vod_remarks || "").replace(/资源/g, '');
+            vod.vod_actor = (data.vod_actor || "").replace(/资源/g, '');
+            vod.vod_director = (data.vod_director || "").replace(/资源/g, '');
+            vod.vod_content = (data.vod_content || "").replace(/资源/g, '');
             // 线路名称处理
             let playFrom = data.vod_play_from || "";
             if (playFrom) {
@@ -432,25 +402,23 @@ async function detail(ids) {
                 let newLines = [];
                 for (let line of lines) {
                     if (line && line.toLowerCase().includes('qijiyun4k')) {
-                        newLines.push('拒绝收费');
+                        newLines.push('奇艺云');
                     } else {
-                        newLines.push(line || "");
+                        newLines.push((line || "").replace(/资源/g, ''));
                     }
                 }
                 vod.vod_play_from = newLines.join('$$$');
             } else {
                 vod.vod_play_from = "";
             }
-            
+            // 分集地址清理乱码
             vod.vod_play_url = replacePlayUrlText(data.vod_play_url || "");
-            
             result.list.push(vod);
             return JSON.stringify(result);
         } else {
-            // AppYsV2模式
+            // 原版AppYsV2格式
             const apiUrl = host;
             const url = getPlayUrlPrefix(apiUrl) + ids;
-
             const json = await request(url, getHeaders(url));
             const obj = JSON.parse(json);
             const result = {
@@ -458,33 +426,29 @@ async function detail(ids) {
             };
             const vod = {};
             genPlayList(apiUrl, obj, json, vod, ids);
-            
-            // 详情页文字清空广告残留
-            vod.vod_name = vod.vod_name || "";
-            vod.type_name = vod.type_name || "";
-            vod.vod_year = vod.vod_year || "";
-            vod.vod_area = vod.vod_area || "";
-            vod.vod_remarks = vod.vod_remarks || "";
-            vod.vod_actor = vod.vod_actor || "";
-            vod.vod_director = vod.vod_director || "";
-            vod.vod_content = vod.vod_content || "";
-            
-            // 线路屏蔽收费源
+            // 详情页全部文本去乱码
+            if (vod.vod_name) vod.vod_name = vod.vod_name.replace(/资源/g, '');
+            if (vod.type_name) vod.type_name = vod.type_name.replace(/资源/g, '');
+            if (vod.vod_year) vod.vod_year = vod.vod_year.replace(/资源/g, '');
+            if (vod.vod_area) vod.vod_area = vod.vod_area.replace(/资源/g, '');
+            if (vod.vod_remarks) vod.vod_remarks = vod.vod_remarks.replace(/资源/g, '');
+            if (vod.vod_actor) vod.vod_actor = vod.vod_actor.replace(/资源/g, '');
+            if (vod.vod_director) vod.vod_director = vod.vod_director.replace(/资源/g, '');
+            if (vod.vod_content) vod.vod_content = vod.vod_content.replace(/资源/g, '');
+            // 播放线路改名
             if (vod.vod_play_from) {
                 let lines = vod.vod_play_from.split('$$$');
                 let newLines = [];
                 for (let line of lines) {
                     if (line && line.toLowerCase().includes('qijiyun4k')) {
-                        newLines.push('拒绝收费');
+                        newLines.push('奇艺云');
                     } else {
-                        newLines.push(line || "");
+                        newLines.push((line || "").replace(/资源/g, ''));
                     }
                 }
                 vod.vod_play_from = newLines.join('$$$');
             }
-            
             vod.vod_play_url = replacePlayUrlText(vod.vod_play_url || "");
-            
             result.list.push(vod);
             return JSON.stringify(result);
         }
@@ -504,14 +468,12 @@ async function play(flag, id, vipFlags) {
                 parseUrls = [];
             }
         }
-
         if (parseUrls.length > 0) {
             const result = await getFinalVideo(flag, parseUrls, id);
             if (result !== null) {
                 return JSON.stringify(result);
             }
         }
-
         if (isVideoFormat(id)) {
             const result = {
                 parse: 0,
@@ -535,33 +497,33 @@ async function play(flag, id, vipFlags) {
 
 async function search(key, quick) {
     try {
-        // 苹果CMS V10模式
+        // 苹果CMS V10格式检测
         if (host.includes('/vod') || host.includes('/provide/vod')) {
             const url = `${host}?ac=videolist&wd=${encodeURIComponent(key)}&pg=1`;
             const json = await request(url, getHeaders(url));
             const obj = JSON.parse(json);
             const videos = [];
-            
             if (obj.list && Array.isArray(obj.list)) {
                 for (const item of obj.list) {
                     videos.push({
                         vod_id: item.vod_id,
-                        vod_name: item.vod_name || "",
+                        vod_name: (item.vod_name || "").replace(/资源/g, ''),
                         vod_pic: item.vod_pic || "",
-                        vod_remarks: item.vod_remarks || ""
+                        vod_remarks: (item.vod_remarks || "").replace(/资源/g, '')
                     });
                 }
             }
-            return JSON.stringify({ list: videos });
+            return JSON.stringify({
+                list: videos
+            });
         } else {
-            // AppYsV2模式
+            // 原版AppYsV2格式
             const apiUrl = host;
             const url = getSearchUrl(apiUrl, encodeURIComponent(key));
             const json = await request(url, getHeaders(url));
             const obj = JSON.parse(json);
             let jsonArray = null;
             const videos = [];
-
             if (obj.list instanceof Array) {
                 jsonArray = obj.list;
             } else if (obj.data instanceof Object && obj.data.list instanceof Array) {
@@ -569,30 +531,30 @@ async function search(key, quick) {
             } else if (obj.data instanceof Array) {
                 jsonArray = obj.data;
             }
-
             if (jsonArray !== null) {
                 for (const vObj of jsonArray) {
                     if (vObj.vod_id) {
                         const v = {
                             vod_id: vObj.vod_id,
-                            vod_name: vObj.vod_name || "",
+                            vod_name: (vObj.vod_name || "").replace(/资源/g, ''),
                             vod_pic: vObj.vod_pic,
-                            vod_remarks: vObj.vod_remarks || ""
+                            vod_remarks: (vObj.vod_remarks || "").replace(/资源/g, '')
                         };
                         videos.push(v);
                     } else {
                         const v = {
                             vod_id: vObj.nextlink,
-                            vod_name: vObj.title || "",
+                            vod_name: (vObj.title || "").replace(/资源/g, ''),
                             vod_pic: vObj.pic,
-                            vod_remarks: vObj.state || ""
+                            vod_remarks: (vObj.state || "").replace(/资源/g, '')
                         };
                         videos.push(v);
                     }
                 }
             }
-
-            const result = { list: videos };
+            const result = {
+                list: videos
+            };
             return JSON.stringify(result);
         }
     } catch (error) {
@@ -601,6 +563,7 @@ async function search(key, quick) {
     return "";
 }
 
+// 解析最终播放地址
 async function getFinalVideo(flag, parseUrls, url) {
     let htmlPlayUrl = "";
     for (const parseUrl of parseUrls) {
@@ -612,13 +575,12 @@ async function getFinalVideo(flag, parseUrls, url) {
         let tryJson = null;
         try {
             tryJson = jsonParse(url, content);
-        } catch (error) { }
-
+        } catch (error) {
+        }
         if (tryJson !== null && tryJson.hasOwnProperty("url") && tryJson.hasOwnProperty("header")) {
             tryJson.header = JSON.stringify(tryJson.header);
             return tryJson;
         }
-
         if (content.includes("<html")) {
             let sniffer = false;
             for (const p of htmlVideoKeyMatch) {
@@ -632,24 +594,22 @@ async function getFinalVideo(flag, parseUrls, url) {
             }
         }
     }
-
     if (htmlPlayUrl !== "") {
         const result = {
-                parse: 0,
-                playUrl: "",
-                url: url
-            };
+            parse: 0,
+            playUrl: "",
+            url: url
+        };
         return JSON.stringify(result);
     }
-
     return null;
 }
 
+// 组装播放列表
 function genPlayList(URL, object, json, vod, vid) {
     const playUrls = [];
     const playFlags = [];
-    
-    // 苹果CMS V10模式
+    // 苹果CMS V10
     if (URL.includes('/vod') || URL.includes('/provide/vod')) {
         const data = object.list && object.list[0] ? object.list[0] : {};
         vod.vod_id = data.vod_id || vid;
@@ -662,13 +622,11 @@ function genPlayList(URL, object, json, vod, vid) {
         vod.vod_actor = data.vod_actor || "";
         vod.vod_director = data.vod_director || "";
         vod.vod_content = data.vod_content || "";
-        
         vod.vod_play_from = data.vod_play_from || "";
         vod.vod_play_url = data.vod_play_url || "";
         return;
     }
-
-    // AppYsV2模式
+    // AppYsV2结构
     if (URL.includes("api.php/app") || URL.includes("xgapp")) {
         const data = object.data || {};
         vod.vod_id = data.vod_id || vid;
@@ -681,15 +639,12 @@ function genPlayList(URL, object, json, vod, vid) {
         vod.vod_actor = data.vod_actor || "";
         vod.vod_director = data.vod_director || "";
         vod.vod_content = data.vod_content || "";
-
         if (data.vod_url_with_player && Array.isArray(data.vod_url_with_player)) {
             for (const from of data.vod_url_with_player) {
                 let flag = from.code?.trim() || from.name?.trim() || "";
                 if (!flag) continue;
-                
                 playFlags.push(flag);
                 playUrls.push(from.url || "");
-                
                 if (from.parse_api) {
                     const parseUrls = parseUrlMap.get(flag) || [];
                     if (!parseUrls.includes(from.parse_api)) {
@@ -711,15 +666,12 @@ function genPlayList(URL, object, json, vod, vid) {
         vod.vod_actor = data.vod_actor || "";
         vod.vod_director = data.vod_director || "";
         vod.vod_content = data.vod_content || "";
-
         if (data.vod_play_list && Array.isArray(data.vod_play_list)) {
             for (const from of data.vod_play_list) {
                 let flag = from.player_info?.from?.trim() || from.player_info?.show?.trim() || "";
                 if (!flag) continue;
-                
                 playFlags.push(flag);
                 playUrls.push(from.url || "");
-                
                 try {
                     const parseUrls = parseUrlMap.get(flag) || [];
                     if (from.player_info?.parse) {
@@ -756,26 +708,23 @@ function genPlayList(URL, object, json, vod, vid) {
         vod.vod_actor = data.vod_actor || "";
         vod.vod_director = data.vod_director || "";
         vod.vod_content = data.vod_content || "";
-
         vod.vod_play_from = data.vod_play_from || "";
         vod.vod_play_url = data.vod_play_url || "";
     }
-
     if (playFlags.length > 0 && playUrls.length > 0) {
         vod.vod_play_from = playFlags.join("$$$");
         vod.vod_play_url = playUrls.join("$$$");
     }
 }
 
+// JSON解析获取播放头+地址
 function jsonParse(input, json) {
     try {
         let jsonPlayData = JSON.parse(json);
         if (jsonPlayData.hasOwnProperty("data") && typeof jsonPlayData.data === "object" && !jsonPlayData.hasOwnProperty("url")) {
             jsonPlayData = jsonPlayData.data;
         }
-
         let url = jsonPlayData.url;
-
         if (url.startsWith("//")) {
             url = "https:" + url;
         }
@@ -790,7 +739,6 @@ function jsonParse(input, json) {
         if (isBlackVodUrl(input, url)) {
             return null;
         }
-
         let headers = {};
         if (jsonPlayData.hasOwnProperty("header")) {
             headers = jsonPlayData.header;
@@ -801,7 +749,6 @@ function jsonParse(input, json) {
         } else if (jsonPlayData.hasOwnProperty("Headers")) {
             headers = jsonPlayData.Headers;
         }
-
         let ua = "";
         if (jsonPlayData.hasOwnProperty("user-agent")) {
             ua = jsonPlayData["user-agent"];
@@ -811,7 +758,6 @@ function jsonParse(input, json) {
         if (ua.trim().length > 0) {
             headers["User-Agent"] = " " + ua;
         }
-
         let referer = "";
         if (jsonPlayData.hasOwnProperty("referer")) {
             referer = jsonPlayData.referer;
@@ -821,15 +767,12 @@ function jsonParse(input, json) {
         if (referer.trim().length > 0) {
             headers["Referer"] = " " + referer;
         }
-
         headers = fixJsonVodHeader(headers, input, url);
-
         const taskResult = {
             header: headers,
             url: url,
             parse: "0"
         };
-
         return taskResult;
     } catch (error) {
         SpiderDebug.log(error);
@@ -837,6 +780,7 @@ function jsonParse(input, json) {
     return null;
 }
 
+// 过滤国内主流视频VIP站点
 function isVip(url) {
     try {
         let isVip = false;
@@ -862,15 +806,16 @@ function isVip(url) {
     return false;
 }
 
+// 黑名单拦截地址
 function isBlackVodUrl(input, url) {
     return url.includes("973973.xyz") || url.includes(".fit:");
 }
 
+// 适配各平台请求头
 function fixJsonVodHeader(headers, input, url) {
     if (headers === null) {
         headers = {};
     }
-
     if (input.includes("www.mgtv.com")) {
         headers["Referer"] = " ";
         headers["User-Agent"] = " Mozilla/5.0";
@@ -881,10 +826,10 @@ function fixJsonVodHeader(headers, input, url) {
         headers["Referer"] = " https://www.bilibili.com/";
         headers["User-Agent"] = " " + "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36";
     }
-
     return headers;
 }
 
+// 视频链接正则匹配
 const snifferMatch = /http((?!http).){26,}?\.(m3u8|mp4|flv|avi|mkv|rm|wmv|mpg)\?.*|http((?!http).){26,}\.(m3u8|mp4|flv|avi|mkv|rm|wmv|mpg)|http((?!http).){26,}\/m3u8\?pt=m3u8.*|http((?!http).)*?default\.ixigua\.com\/.*|http((?!http).)*?cdn-tos[^\?]*|http((?!http).)*?\/obj\/tos[^\?]*|http.*?\/player\/m3u8play\.php\?url=.*|http.*?\/player\/.*?[pP]lay\.php\?url=.*|http.*?\/playlist\/m3u8\/\?vid=.*|http.*?\.php\?type=m3u8&.*|http.*?\/download.aspx\?.*|http.*?\/api\/up_api.php\?.*|https.*?\.66yk\.cn.*|http((?!http).)*?netease\.com\/file\/.*/;
 
 function isVideoFormat(url) {
@@ -905,6 +850,7 @@ function UA(url) {
     return "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36";
 }
 
+// 各类接口拼接地址工具函数
 function getCateUrl(URL) {
     if (URL.includes("api.php/app") || URL.includes("xgapp")) {
         return URL + "nav?token=";
@@ -935,27 +881,24 @@ function getRecommendUrl(URL) {
     }
 }
 
+// 筛选分类配置（完整中文无乱码）
 function getFilterTypes(URL, typeExtend) {
     let str = "";
-
     if (typeExtend !== null) {
         for (let key in typeExtend) {
             if (key === "class" || key === "area" || key === "lang" || key === "year") {
                 try {
                     str += key + "+全部=+" + typeExtend[key].replace(/,/g, "+") + "\n";
-                } catch (e) { }
+                } catch (e) {
+                }
             }
         }
     }
-
     if (URL.includes(".vod")) {
         str += "\n" + "排序+全部=+最新=time+最热=hits+评分=score";
-    } else if (URL.includes("api.php/app") || URL.includes("xgapp")) {
-        // 无内容
-    } else {
-        str = "分类+全部=+电影=movie+连续剧=tvplay+综艺=tvshow+动漫=comic+4K=movie_4k+体育=tiyu\nclass+全部=+喜剧+爱情+恐怖+动作+科幻+剧情+战争+警匪+犯罪+动画+奇幻+武侠+冒险+枪战+悬疑+惊悚+经典+青春+文艺+微电影+古装+历史+运动+农村\narea+全部=+大陆+香港+台湾+美国+英国+法国+日本+韩国+德国+泰国+印度+西班牙+加拿大+其他\nyear+全部=+2025+2024+2023+2022+2021+2020+2019+2018+2017+2016+2015+2014+2013+2012+2011+2010+2009+2008+2007+2006+2005+2004+2003+2002+2001+2000";
+    } else if (!(URL.includes("api.php/app") || URL.includes("xgapp"))) {
+        str = "类型+全部=+电影=movie+剧集=tvshow+综艺=tvshow+动漫=comic+4K=movie_4k+体育=tiyu\n地区+全部=+大陆+香港+台湾+美国+英国+法国+日本+韩国+德国+泰国+印度+西班牙+加拿大+其他\n语言+全部=\n年代+全部=+2025+2024+2023+2022+2021+2020+2019+2018+2017+2016+2015+2014+2013+2012+2011+2010+2009+2008+2007+2006+2005+2004+2003+2002+2001+2000";
     }
-
     return str;
 }
 
@@ -979,8 +922,9 @@ function getCateFilterUrlPrefix(URL) {
     }
 }
 
+// 屏蔽分类：色情、伦理、风月
 function isBan(key) {
-    return key === "伦理" || key === "情色" || key === "福利";
+    return key === "伦理" || key === "风月" || key === "色情";
 }
 
 function getSearchUrl(URL, KEY) {
@@ -994,6 +938,7 @@ function getSearchUrl(URL, KEY) {
     return "";
 }
 
+// 递归遍历JSON查找指定数组
 function findJsonArray(obj, match, result) {
     Object.keys(obj).forEach((k) => {
         try {
@@ -1018,10 +963,31 @@ function findJsonArray(obj, match, result) {
     });
 }
 
+function jsonArr2Str(array) {
+    const strings = [];
+    for (let i = 0; i < array.length; i++) {
+        try {
+            strings.push(array[i]);
+        } catch (e) {
+            SpiderDebug.log(e);
+        }
+    }
+    return strings.join(",");
+}
+
 function getHeaders(URL) {
     const headers = {};
     headers["User-Agent"] = UA(URL);
     return headers;
+}
+
+function isJsonString(str) {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
 }
 
 export function __jsEvalReturn() {
