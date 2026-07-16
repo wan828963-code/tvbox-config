@@ -1,5 +1,3 @@
-import { Crypto, _ } from 'assets://js/lib/cat.js'
- 
 let host = '';
 let header = {
 'User-Agent': 'okhttp/3.12.11'
@@ -7,13 +5,13 @@ let header = {
 let siteKey = '';
 let siteType = '';
 let siteJx = '';
- 
+
 const urlPattern1 = /api.php\/.?\/vod/;
 const urlPattern2 = /api.php\/.+?.vod/;
 const parsePattern = /.+\?.+=/;
 const parsePattern1 = /.(url|v|vid|php?id)=/;
 const parsePattern2 = /https?:\/\/[^/]*/;
- 
+
 const htmlVideoKeyMatch = [
 /player=new/,
 /<div id="video"/,
@@ -23,9 +21,9 @@ const htmlVideoKeyMatch = [
 /<iframe[\s\S]*?src="[^"]+?"/,
 /<video[\s\S]*?src="[^"]+?"/,
 ];
- 
+
 const parseUrlMap = new Map();
- 
+
 async function init(cfg) {
 siteKey = cfg.skey;
 siteType = cfg.stype;
@@ -35,7 +33,7 @@ host = cfg.ext.host;
 siteJx = cfg.ext;
 }
 };
- 
+
 async function request(reqUrl, ua, timeout = 60000) {
 let res = await req(reqUrl, {
 method: 'get',
@@ -47,16 +45,15 @@ timeout: timeout,
 });
 return res.content;
 }
- 
+
 async function home(filter) {
 try {
-// 苹果CMS V10模式
 if (host.includes('/vod') || host.includes('/provide/vod')) {
 const url = host;
 const json = await request(url, getHeaders(url));
 const obj = JSON.parse(json);
 const result = { class: [] };
- 
+
 if (obj.class && Array.isArray(obj.class)) {
 for (const item of obj.class) {
 const typeName = item.type_name;
@@ -69,14 +66,13 @@ type_name: typeName
 }
 return JSON.stringify(result);
 } else {
-// 原有AppYsV2模式
 let url = getCateUrl(host);
 let jsonArray = null;
- 
+
 if (url) {
 const json = await request(url, getHeaders(url));
 const obj = JSON.parse(json);
- 
+
 if (obj.hasOwnProperty("class") && Array.isArray(obj.class)) {
 jsonArray = obj.class;
 } else if (obj.hasOwnProperty("list") && Array.isArray(obj.list)) {
@@ -100,7 +96,7 @@ type_id: kv[1].trim(),
 jsonArray.push(newCls);
 }
 }
- 
+
 const result = { class: [] };
 if (jsonArray != null) {
 for (let i = 0; i < jsonArray.length; i++) {
@@ -115,17 +111,16 @@ type_name: (typeName || "").replace(/奇迹云|加q群[:：]?\s*\d+\s*获取更�
 const typeExtend = jObj.type_extend;
 if (filter) {
 const filterStr = getFilterTypes(url, typeExtend);
- 
+
 const filters = filterStr.split("\n");
 const filterArr = [];
 for (let k = (url) ? 1 : 0; k < filters.length; k++) {
 const l = filters[k].trim();
 if (!l) continue;
 const oneLine = l.split("+");
- 
+
 let type = oneLine[0].trim();
 let typeN = type;
-// 乱码筛选键恢复中文
 if (type === "class") typeN = "类型";
 else if (type === "area") typeN = "地区";
 else if (type === "lang") typeN = "语言";
@@ -139,7 +134,7 @@ value: [],
 for (let j = 1; j < oneLine.length; j++) {
 const kv = oneLine[j].trim();
 const sp = kv.indexOf("=");
- 
+
 if (sp === -1) {
 if (isBan(kv)) continue;
 jOne.value.push({ n: kv, v: kv });
@@ -162,7 +157,7 @@ result.filters[typeId] = filterArr;
 result.class.push(newCls);
 }
 }
- 
+
 return JSON.stringify(result);
 }
 } catch (e) {
@@ -170,16 +165,15 @@ SpiderDebug.log("分类接口错误" + e);
 }
 return JSON.stringify({ class: [] });
 }
- 
+
 async function homeVod() {
 try {
-// 苹果CMS V10模式
 if (host.includes('/vod') || host.includes('/provide/vod')) {
 const url = `${host}?ac=videolist&t=1&pg=1`;
 const json = await request(url, getHeaders(url));
 const obj = JSON.parse(json);
 const videos = [];
- 
+
 if (obj.list && Array.isArray(obj.list)) {
 for (const item of obj.list) {
 videos.push({
@@ -192,11 +186,10 @@ vod_remarks: (item.vod_remarks || "").replace(/奇迹云/g, '')
 }
 return JSON.stringify({ list: videos });
 } else {
-// 原有AppYsV2模式
 const apiUrl = host;
 let url = getRecommendUrl(apiUrl);
 let isTV = false;
- 
+
 if (!url) {
 url = getCateFilterUrlPrefix(apiUrl) + "movie&page=1&area=&type=&start=";
 isTV = true;
@@ -239,7 +232,7 @@ videos.push(v);
 }
 }
 }
- 
+
 const result = {
 list: videos,
 };
@@ -250,16 +243,15 @@ SpiderDebug.log(e);
 }
 return "";
 }
- 
+
 async function category(tid, pg, filter, extend) {
 try {
-// 苹果CMS V10模式
 if (host.includes('/vod') || host.includes('/provide/vod')) {
 const url = `${host}?ac=videolist&t=${tid}&pg=${pg}`;
 const json = await request(url, getHeaders(url));
 const obj = JSON.parse(json);
 const videos = [];
- 
+
 if (obj.list && Array.isArray(obj.list)) {
 for (const item of obj.list) {
 videos.push({
@@ -270,7 +262,7 @@ vod_remarks: (item.vod_remarks || "").replace(/奇迹云/g, '')
 });
 }
 }
- 
+
 return JSON.stringify({
 page: pg,
 pagecount: obj.pagecount || 1,
@@ -279,7 +271,6 @@ total: obj.total || 0,
 list: videos
 });
 } else {
-// 原有AppYsV2模式
 const apiUrl = host;
 let url = getCateFilterUrlPrefix(apiUrl) + tid + getCateFilterUrlSuffix(apiUrl);
 url = url.replace(/#PN#/g, pg);
@@ -288,11 +279,11 @@ url = url.replace(/area/g, extend?.area ?? "");
 url = url.replace(/lang/g, extend?.lang ?? "");
 url = url.replace(/year/g, extend?.year ?? "");
 url = url.replace(/排序/g, extend?.排序 ?? "");
- 
+
 const json = await request(url, getHeaders(url));
 const obj = JSON.parse(json);
- 
-let totalPg = Infinity;
+
+let totalPg = 9999;
 try {
 if (obj.totalpage !== undefined && typeof obj.totalpage === "number") {
 totalPg = obj.totalpage;
@@ -316,7 +307,7 @@ totalPg = total % limit === 0 ? total / limit : Math.floor(total / limit) + 1;
 } catch (e) {
 SpiderDebug.log(e);
 }
- 
+
 const jsonArray =
 obj.list !== undefined
 ? obj.list
@@ -324,7 +315,7 @@ obj.list !== undefined
 ? obj.data.list
 : obj.data;
 const videos = [];
- 
+
 if (jsonArray !== undefined) {
 for (let i = 0; i < jsonArray.length; i++) {
 const vObj = jsonArray[i];
@@ -337,15 +328,15 @@ vod_remarks: ((vObj.vod_remarks !== undefined ? vObj.vod_remarks : vObj.state) |
 videos.push(v);
 }
 }
- 
+
 const result = {
 page: pg,
 pagecount: totalPg,
 limit: 90,
-total: Infinity,
+total: 9999,
 list: videos,
 };
- 
+
 return JSON.stringify(result);
 }
 } catch (e) {
@@ -353,8 +344,7 @@ SpiderDebug.log(e);
 }
 return "";
 }
- 
-// 辅助函数：只替换文字，不改变分隔符和结构
+
 function replacePlayUrlText(playUrl) {
 if (!playUrl) return playUrl;
 let result = '';
@@ -364,7 +354,7 @@ let found = -1;
 let sep = '';
 let dollarPos = playUrl.indexOf('$$$', i);
 let hashPos = playUrl.indexOf('#', i);
- 
+
 if (dollarPos !== -1 && (hashPos === -1 || dollarPos < hashPos)) {
 found = dollarPos;
 sep = '$$$';
@@ -372,7 +362,7 @@ sep = '$$$';
 found = hashPos;
 sep = '#';
 }
- 
+
 if (found !== -1) {
 let segment = playUrl.substring(i, found);
 result += segment.replace(/奇迹云/g, '');
@@ -384,17 +374,16 @@ break;
 }
 return result;
 }
- 
+
 async function detail(ids) {
 try {
-// 苹果CMS V10模式
 if (host.includes('/vod') || host.includes('/provide/vod')) {
 const url = `${host}?ac=detail&ids=${ids}`;
 const json = await request(url, getHeaders(url));
 const obj = JSON.parse(json);
 const result = { list: [] };
 const vod = {};
- 
+
 const data = obj.list && obj.list[0] ? obj.list[0] : {};
 vod.vod_id = data.vod_id || ids;
 vod.vod_name = (data.vod_name || "").replace(/奇迹云/g, '');
@@ -406,8 +395,7 @@ vod.vod_remarks = (data.vod_remarks || "").replace(/奇迹云/g, '');
 vod.vod_actor = (data.vod_actor || "").replace(/奇迹云/g, '');
 vod.vod_director = (data.vod_director || "").replace(/奇迹云/g, '');
 vod.vod_content = (data.vod_content || "").replace(/奇迹云/g, '');
- 
-// 处理线路名称
+
 let playFrom = data.vod_play_from || "";
 if (playFrom) {
 let lines = playFrom.split('$$$');
@@ -423,17 +411,15 @@ vod.vod_play_from = newLines.join('$$$');
 } else {
 vod.vod_play_from = "";
 }
- 
-// 处理选集
+
 vod.vod_play_url = replacePlayUrlText(data.vod_play_url || "");
- 
+
 result.list.push(vod);
 return JSON.stringify(result);
 } else {
-// 原有AppYsV2模式
 const apiUrl = host;
 const url = getPlayUrlPrefix(apiUrl) + ids;
- 
+
 const json = await request(url, getHeaders(url));
 const obj = JSON.parse(json);
 const result = {
@@ -441,8 +427,7 @@ list: [],
 };
 const vod = {};
 genPlayList(apiUrl, obj, json, vod, ids);
- 
-// 替换详情水印文字
+
 if (vod.vod_name) vod.vod_name = vod.vod_name.replace(/奇迹云/g, '');
 if (vod.type_name) vod.type_name = vod.type_name.replace(/奇迹云/g, '');
 if (vod.vod_year) vod.vod_year = vod.vod_year.replace(/奇迹云/g, '');
@@ -451,8 +436,7 @@ if (vod.vod_remarks) vod.vod_remarks = vod.vod_remarks.replace(/奇迹云/g, '')
 if (vod.vod_actor) vod.vod_actor = vod.vod_actor.replace(/奇迹云/g, '');
 if (vod.vod_director) vod.vod_director = vod.vod_director.replace(/奇迹云/g, '');
 if (vod.vod_content) vod.vod_content = vod.vod_content.replace(/奇迹云/g, '');
- 
-// 替换线路名称
+
 if (vod.vod_play_from) {
 let lines = vod.vod_play_from.split('$$$');
 let newLines = [];
@@ -465,10 +449,9 @@ newLines.push((line || "").replace(/奇迹云/g, ''));
 }
 vod.vod_play_from = newLines.join('$$$');
 }
- 
-// 处理选集
+
 vod.vod_play_url = replacePlayUrlText(vod.vod_play_url || "");
- 
+
 result.list.push(vod);
 return JSON.stringify(result);
 }
@@ -477,7 +460,7 @@ SpiderDebug.log(e);
 }
 return "";
 }
- 
+
 async function play(flag, id, vipFlags) {
 try {
 let parseUrls = siteJx[flag];
@@ -488,14 +471,14 @@ parseUrls = siteJx[''];
 parseUrls = [];
 }
 }
- 
+
 if (parseUrls.length > 0) {
 const result = await getFinalVideo(flag, parseUrls, id);
 if (result !== null) {
 return JSON.stringify(result);
 }
 }
- 
+
 if (isVideoFormat(id)) {
 const result = {
 parse: 0,
@@ -516,16 +499,15 @@ SpiderDebug.log(e);
 }
 return "";
 }
- 
+
 async function search(key, quick) {
 try {
-// 苹果CMS V10模式
 if (host.includes('/vod') || host.includes('/provide/vod')) {
 const url = `${host}?ac=videolist&wd=${encodeURIComponent(key)}&pg=1`;
 const json = await request(url, getHeaders(url));
 const obj = JSON.parse(json);
 const videos = [];
- 
+
 if (obj.list && Array.isArray(obj.list)) {
 for (const item of obj.list) {
 videos.push({
@@ -538,14 +520,13 @@ vod_remarks: (item.vod_remarks || "").replace(/奇迹云/g, '')
 }
 return JSON.stringify({ list: videos });
 } else {
-// 原有AppYsV2模式
 const apiUrl = host;
 const url = getSearchUrl(apiUrl, encodeURIComponent(key));
 const json = await request(url, getHeaders(url));
 const obj = JSON.parse(json);
 let jsonArray = null;
 const videos = [];
- 
+
 if (obj.list instanceof Array) {
 jsonArray = obj.list;
 } else if (obj.data instanceof Object && obj.data.list instanceof Array) {
@@ -553,7 +534,7 @@ jsonArray = obj.data.list;
 } else if (obj.data instanceof Array) {
 jsonArray = obj.data;
 }
- 
+
 if (jsonArray !== null) {
 for (const vObj of jsonArray) {
 if (vObj.vod_id) {
@@ -575,7 +556,7 @@ videos.push(v);
 }
 }
 }
- 
+
 const result = { list: videos };
 return JSON.stringify(result);
 }
@@ -584,8 +565,7 @@ SpiderDebug.log(error);
 }
 return "";
 }
- 
-// 辅助函数
+
 async function getFinalVideo(flag, parseUrls, url) {
 let htmlPlayUrl = "";
 for (const parseUrl of parseUrls) {
@@ -598,12 +578,12 @@ let tryJson = null;
 try {
 tryJson = jsonParse(url, content);
 } catch (error) { }
- 
+
 if (tryJson !== null && tryJson.hasOwnProperty("url") && tryJson.hasOwnProperty("header")) {
 tryJson.header = JSON.stringify(tryJson.header);
 return tryJson;
 }
- 
+
 if (content.includes("<html")) {
 let sniffer = false;
 for (const p of htmlVideoKeyMatch) {
@@ -617,7 +597,7 @@ htmlPlayUrl = parseUrl;
 }
 }
 }
- 
+
 if (htmlPlayUrl !== "") {
 const result = {
 parse: 0,
@@ -626,34 +606,32 @@ url: url
 };
 return JSON.stringify(result);
 }
- 
+
 return null;
 }
- 
+
 function genPlayList(URL, object, json, vod, vid) {
 const playUrls = [];
 const playFlags = [];
- 
-// 苹果CMS V10模式
+
 if (URL.includes('/vod') || URL.includes('/provide/vod')) {
 const data = object.list && object.list[0] ? object.list[0] : {};
 vod.vod_id = data.vod_id || vid;
 vod.vod_name = data.vod_name || "";
 vod.vod_pic = data.vod_pic || "";
-vod.type_name = data.type_name || "";
+vod.type_name = data.vod_class || "";
 vod.vod_year = data.vod_year || "";
 vod.vod_area = data.vod_area || "";
 vod.vod_remarks = data.vod_remarks || "";
 vod.vod_actor = data.vod_actor || "";
 vod.vod_director = data.vod_director || "";
 vod.vod_content = data.vod_content || "";
- 
+
 vod.vod_play_from = data.vod_play_from || "";
 vod.vod_play_url = data.vod_play_url || "";
 return;
 }
- 
-// AppYsV2模式
+
 if (URL.includes("api.php/app") || URL.includes("xgapp")) {
 const data = object.data || {};
 vod.vod_id = data.vod_id || vid;
@@ -666,15 +644,15 @@ vod.vod_remarks = data.vod_remarks || "";
 vod.vod_actor = data.vod_actor || "";
 vod.vod_director = data.vod_director || "";
 vod.vod_content = data.vod_content || "";
- 
+
 if (data.vod_url_with_player && Array.isArray(data.vod_url_with_player)) {
 for (const from of data.vod_url_with_player) {
 let flag = from.code?.trim() || from.name?.trim() || "";
 if (!flag) continue;
- 
+
 playFlags.push(flag);
 playUrls.push(from.url || "");
- 
+
 if (from.parse_api) {
 const parseUrls = parseUrlMap.get(flag) || [];
 if (!parseUrls.includes(from.parse_api)) {
@@ -696,15 +674,15 @@ vod.vod_remarks = data.vod_remarks || "";
 vod.vod_actor = data.vod_actor || "";
 vod.vod_director = data.vod_director || "";
 vod.vod_content = data.vod_content || "";
- 
+
 if (data.vod_play_list && Array.isArray(data.vod_play_list)) {
 for (const from of data.vod_play_list) {
 let flag = from.player_info?.from?.trim() || from.player_info?.show?.trim() || "";
 if (!flag) continue;
- 
+
 playFlags.push(flag);
 playUrls.push(from.url || "");
- 
+
 try {
 const parseUrls = parseUrlMap.get(flag) || [];
 if (from.player_info?.parse) {
@@ -727,7 +705,6 @@ parseUrlMap.set(flag, parseUrls);
 SpiderDebug.log(e);
 }
 }
-}
 } else if (urlPattern1.test(URL)) {
 const data = object.list && object.list[0] ? object.list[0] : {};
 vod.vod_id = data.vod_id || vid;
@@ -740,26 +717,26 @@ vod.vod_remarks = data.vod_remarks || "";
 vod.vod_actor = data.vod_actor || "";
 vod.vod_director = data.vod_director || "";
 vod.vod_content = data.vod_content || "";
- 
+
 vod.vod_play_from = data.vod_play_from || "";
 vod.vod_play_url = data.vod_play_url || "";
 }
- 
+
 if (playFlags.length > 0 && playUrls.length > 0) {
 vod.vod_play_from = playFlags.join("$$$");
 vod.vod_play_url = playUrls.join("$$$");
 }
 }
- 
+
 function jsonParse(input, json) {
 try {
 let jsonPlayData = JSON.parse(json);
 if (jsonPlayData.hasOwnProperty("data") && typeof jsonPlayData.data === "object" && !jsonPlayData.hasOwnProperty("url")) {
 jsonPlayData = jsonPlayData.data;
 }
- 
+
 let url = jsonPlayData.url;
- 
+
 if (url.startsWith("//")) {
 url = "https:" + url;
 }
@@ -774,7 +751,7 @@ return null;
 if (isBlackVodUrl(input, url)) {
 return null;
 }
- 
+
 let headers = {};
 if (jsonPlayData.hasOwnProperty("header")) {
 headers = jsonPlayData.header;
@@ -785,7 +762,7 @@ headers = jsonPlayData.headers;
 } else if (jsonPlayData.hasOwnProperty("Headers")) {
 headers = jsonPlayData.Headers;
 }
- 
+
 let ua = "";
 if (jsonPlayData.hasOwnProperty("user-agent")) {
 ua = jsonPlayData["user-agent"];
@@ -795,7 +772,7 @@ ua = jsonPlayData["User-Agent"];
 if (ua.trim().length > 0) {
 headers["User-Agent"] = " " + ua;
 }
- 
+
 let referer = "";
 if (jsonPlayData.hasOwnProperty("referer")) {
 referer = jsonPlayData.referer;
@@ -805,22 +782,22 @@ referer = jsonPlayData.Referer;
 if (referer.trim().length > 0) {
 headers["Referer"] = " " + referer;
 }
- 
+
 headers = fixJsonVodHeader(headers, input, url);
- 
+
 const taskResult = {
 header: headers,
 url: url,
 parse: "0"
 };
- 
+
 return taskResult;
 } catch (error) {
 SpiderDebug.log(error);
 }
 return null;
 }
- 
+
 function isVip(url) {
 try {
 let isVip = false;
@@ -845,16 +822,16 @@ SpiderDebug.log(e);
 }
 return false;
 }
- 
+
 function isBlackVodUrl(input, url) {
 return url.includes("973973.xyz") || url.includes(".fit:");
 }
- 
+
 function fixJsonVodHeader(headers, input, url) {
 if (headers === null) {
 headers = {};
 }
- 
+
 if (input.includes("www.mgtv.com")) {
 headers["Referer"] = " ";
 headers["User-Agent"] = " Mozilla/5.0";
@@ -865,30 +842,30 @@ headers["User-Agent"] = " Mozilla/5.0";
 headers["Referer"] = " https://www.bilibili.com/";
 headers["User-Agent"] = " " + "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36";
 }
- 
+
 return headers;
 }
- 
-const snifferMatch = /http((?!http).){26,}?\.(m3u8|mp4|flv|avi|mkv|rm|wmv|mpg)?|http((?!http).){26,}\.(m3u8|mp4|flv|avi|mkv|rm|wmv|mpg)|http((?!http).)*?\/m3u8\?pt=m3u8.|http((?!http).)*?default.ixigua.com\/|http((?!http).)*?cdn-tos[^?]|http((?!http).)*?\/obj\/tos[^?]|http.*?\/player\/m3u8play.php\?url=.|http.*?\/player\/.*?[pP]lay.php\?url=.|http.*?\/playlist\/m3u8\/?vid=.|http.*?.php\?type=m3u8&.|http.*?\/download.aspx?.|http.*?\/api\/up_api.php?.|https.*?.66yk.cn./m;
- 
+
+const snifferMatch = /http((?!http).){26,}?\.(m3u8|mp4|flv|avi|mkv|rm|wmv|mpg)?|http((?!http).){26,}\.(m3u8|mp4|flv|avi|mkv|rm|wmv|mpg)|http((?!http).)*?\/m3u8\?pt=m3u8.|http((?!http).)*?default.ixigua.com\/|http((?!http).)*?cdn-tos[^?]|http((?!http).)*?\/obj\/tos[^?]|http.*?\/player\/m3u8play.php\?url=.|http.*?\/player\/.*?[pP]lay.php\?url=.|http.*?\/playlist\/m3u8\/?vid=.|http.*?.php\?type=m3u8&.|http.*?\/download.aspx?.|http.*?\/api\/up_api.php?.|https.*?.66yk.*****;
+
 function isVideoFormat(url) {
 if (snifferMatch.test(url)) {
 return !url.includes("cdn-tos") || !url.includes(".js");
 }
 return false;
 }
- 
+
 function isVideo(url) {
 return !url.includes(".mp4") && !url.includes(".m3u8");
 }
- 
+
 function UA(url) {
 if (url.includes(".vod")) {
 return "okhttp/4.1.0";
 }
 return "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36";
 }
- 
+
 function getCateUrl(URL) {
 if (URL.includes("api.php/app") || URL.includes("xgapp")) {
 return URL + "nav?token=";
@@ -898,7 +875,7 @@ return URL + "/types";
 return "";
 }
 }
- 
+
 function getPlayUrlPrefix(URL) {
 if (URL.includes("api.php/app") || URL.includes("xgapp")) {
 return URL + "video_detail?id=";
@@ -908,7 +885,7 @@ return URL + "/detail?vod_id=";
 return "";
 }
 }
- 
+
 function getRecommendUrl(URL) {
 if (URL.includes("api.php/app") || URL.includes("xgapp")) {
 return URL + "index_video?token=";
@@ -918,10 +895,10 @@ return URL + "/vodPhbAll";
 return "";
 }
 }
- 
+
 function getFilterTypes(URL, typeExtend) {
 let str = "";
- 
+
 if (typeExtend !== null) {
 for (let key in typeExtend) {
 if (key === "class" || key === "area" || key === "lang" || key === "year") {
@@ -931,18 +908,17 @@ str += key + "+全部=+" + typeExtend[key].replace(/,/g, "+") + "\n";
 }
 }
 }
- 
+
 if (URL.includes(".vod")) {
 str += "\n" + "排序+全部=+最新=time+最热=hits+评分=score";
 } else if (URL.includes("api.php/app") || URL.includes("xgapp")) {
-// Do nothing
 } else {
 str = "分类+全部=+电影=movie+连续剧=tvplay+综艺=tvshow+动漫=comic+4K=movie_4k+体育=tiyu\nclass+全部=+喜剧+爱情+恐怖+动作+科幻+剧情+战争+警匪+犯罪+动画+奇幻+武侠+冒险+枪战+悬疑+惊悚+经典+青春+文艺+微电影+古装+历史+运动+农村+伦理+情色+福利+三级+儿童+网络电影\narea+全部=+大陆+香港+台湾+美国+英国+法国+日本+韩国+德国+泰国+印度+西班牙+加拿大+其他\nyear+全部=+2025+2024+2023+2022+2021+2020+2019+2018+2017+2016+2015+2014+2013+2012+2011+2010+2009+2008+2007+2006+2005+2004+2003+2002+2001+2000";
 }
- 
+
 return str;
 }
- 
+
 function getCateFilterUrlSuffix(URL) {
 if (URL.includes("api.php/app") || URL.includes("xgapp")) {
 return "&class=class&area=area&lang=lang&year=year&limit=18&pg=#PN#";
@@ -952,7 +928,7 @@ return "&class=class&area=area&lang=lang&year=year&by=排序&limit=18&page=#PN#"
 return "&page=#PN#&area=area&type=class&start=year";
 }
 }
- 
+
 function getCateFilterUrlPrefix(URL) {
 if (URL.includes("api.php/app") || URL.includes("xgapp")) {
 return URL + "video?tid=";
@@ -962,11 +938,11 @@ return URL + "?type=";
 return URL + "?ac=list&class=";
 }
 }
- 
+
 function isBan(key) {
 return key === "伦理" || key === "情色" || key === "福利";
 }
- 
+
 function getSearchUrl(URL, KEY) {
 if (URL.includes(".vod")) {
 return URL + "?wd=" + KEY + "&page=";
@@ -977,7 +953,7 @@ return URL + "?ac=list&zm=" + KEY + "&page=";
 }
 return "";
 }
- 
+
 function findJsonArray(obj, match, result) {
 Object.keys(obj).forEach((k) => {
 try {
@@ -1001,43 +977,16 @@ SpiderDebug.log(e);
 }
 });
 }
- 
-function jsonArr2Str(array) {
-const strings = [];
-for (let i = 0; i < array.length; i++) {
-try {
-strings.push(array[i]);
-} catch (e) {
-SpiderDebug.log(e);
-}
-}
-return strings.join(",");
-}
- 
+
 function getHeaders(URL) {
 const headers = {};
 headers["User-Agent"] = UA(URL);
 headers["Accept-Charset"] = "UTF-8";
 return headers;
 }
- 
-function isJsonString(str) {
-try {
-JSON.parse(str);
-} catch (e) {
-return false;
-}
-return true;
-}
- 
+
 export function __jsEvalReturn() {
 return {
-init: init,
-home: home,
-homeVod: homeVod,
-category: category,
-detail: detail,
-play: play,
-search: search,
+init,home,homeVod,category,detail,play,search,
 };
 }
