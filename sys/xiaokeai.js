@@ -12,7 +12,7 @@ var processedHosts = new Set();
 var LIVS_SOURCES = [
   {
     "name": "👖潇播",
-    "url": "https://pan.szfx.top/down.php/2cbea38df855e79ddbf4b8debf1c24d9.txt"
+    "url": "https://pan.szfx.top/down.php/e06c158c4c9f6d90aed6b9721e43a46a.txt"
   },
   {
     "name": "👖潇雨TV直播",
