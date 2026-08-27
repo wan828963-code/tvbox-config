@@ -18,11 +18,6 @@
             "url": "https://gh-proxy.org/https://raw.githubusercontent.com/wan828963-code/kuaishou-live/refs/heads/main/kuaishou_live.m3u"
         },
         {
-      "name" : "☁云霄玉山视频直播",
-      "type" : 0,
-      "url" : "https://www.liaobagua.com/tv/tv.php?a=play"
-        },
-        {
             "name": "☁云霄twitch直播",
             "type": 0,
             "url": "https://twitch.445569.xyz/live.m3u"
