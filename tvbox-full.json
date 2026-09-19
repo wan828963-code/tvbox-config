@@ -74,11 +74,11 @@
             "name": "☁云霄专属影院",
             "type": 3,
             "api": "csp_Douban",
-            "jar": "https://dogpan.com/f/nZVwCm/paomadeng.jar",
+            "jar": "https://gh-proxy.org/https://raw.githubusercontent.com/wan828963-code/tvbox-config/refs/heads/main/sys/paomadeng.jar",
             "searchable": 1,
             "quickSearch": 0,
             "filterable": 1,
-            "ext": "https://dogpan.com/f/X6APUO/paomadeng.txt"
+            "ext": "https://gh-proxy.org/https://raw.githubusercontent.com/wan828963-code/tvbox-config/refs/heads/main/sys/paomadeng.txt"
         },
         {
       "key" : "裤佬电视直播",
