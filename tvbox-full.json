@@ -185,7 +185,7 @@
       "key": "山楂",
       "name": "☁云霄丨山楂丨4K",
       "type": 3,
-      "api": "https://dogpan.com/f/pg6JCA/山楂.py",
+      "api": "https://gh-proxy.org/https://raw.githubusercontent.com/wan828963-code/tvbox-config/refs/heads/main/sys/%E5%B1%B1%E6%A5%82.py",
       "searchable": 1,
       "quickSearch": 1,
       "filterable": 1,
@@ -654,7 +654,7 @@
       "key": "随机小姐姐",
       "name": "☁云霄丨随机丨API",
       "type": 3,
-      "api": "https://dogpan.com/f/76O4uZ/随机小姐姐.py"
+      "api": "https://gh-proxy.org/https://raw.githubusercontent.com/wan828963-code/tvbox-config/refs/heads/main/sys/随机小姐姐.py"
     }
     ],
   "parses": [
