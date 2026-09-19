@@ -1,22 +1,42 @@
 {
-  "wallpaper": "https://dogpan.com/f/oY9wUv/beijing.png",
+  "wallpaper": "https://jsnz.pages.dev/f/497c52ad.png",
   "logo": "https://pan.szfx.top/down.php/c9983508028eb6b896904c7fe1348d60",
   "lives": [
         {
             "name": "☁云霄IPTV直播",
             "type": 0,
-            "url": "https://gh-proxy.org/https://github.com/wan828963-code/IPTV/blob/main/live.m3u"
+            "url": "https://iptv.445569.xyz/live.m3u"
         },
         {
             "name": "☁云霄抖音直播",
             "type": 1,
-            "url": "https://gh-proxy.org/https://raw.githubusercontent.com/wan828963-code/douyin_live/refs/heads/main/douyin_live.m3u"
+            "url": "https://douyin.445569.xyz/live.m3u"
         },
         {
             "name": "☁云霄快手直播",
             "type": 1,
-            "url": "https://gh-proxy.org/https://raw.githubusercontent.com/wan828963-code/kuaishou-live/refs/heads/main/kuaishou_live.m3u"
+            "url": "https://kuaishou.445569.xyz/list.m3u"
         },
+    {
+      "name": "☁云霄虎牙直播",
+      "type": 0,
+      "url": "https://huya.445569.xyz/live.m3u"
+    },
+    {
+      "name": "斗鱼直播",
+      "type": 0,
+      "url": "https://douyu.445569.xyz/live.m3u"
+    },
+    {
+      "name": "酷狗直播",
+      "type": 0,
+      "url": "https://kugou.445569.xyz/live.m3u"
+    },
+    {
+      "name": "YY直播",
+      "type": 0,
+      "url": "https://yy.445569.xyz/live.m3u"
+    },
         {
             "name": "☁云霄twitch直播",
             "type": 0,
