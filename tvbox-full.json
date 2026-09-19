@@ -58,7 +58,7 @@
             "url": "https://tiktok.445569.xyz/live.m3u"
         },
         {
-      "name": "👖裤佬GTA游戏直播",
+      "name": "☁云霄GTA游戏直播",
       "type": 0,
       "url": "https://stymei1.pages.dev/live.m3u"
     },
@@ -80,64 +80,12 @@
             "filterable": 1,
             "ext": "https://gh-proxy.org/https://raw.githubusercontent.com/wan828963-code/tvbox-config/refs/heads/main/sys/paomadeng.txt"
         },
-        {
-      "key" : "裤佬电视直播",
-      "name" : "☁云霄丨电视丨直播",
-      "type" : 3,
-      "api" : "https://jsnz.pages.dev/f/f05e3b39.js"
-        },
           {
       "key": "聚合",
       "name": "☁云霄聚合",
       "type": 3,
       "api": "https://jsnz.pages.dev/f/4df9fb60.py"
     },
-        {
-            "key": "裤佬极影4K",
-            "name": "☁云霄丨极影丨4K",
-            "type": 3,
-            "api": "https://gh-proxy.org/https://raw.githubusercontent.com/wan828963-code/tvbox-config/refs/heads/main/sys/jiying4k.js",
-            "searchable": 1,
-            "quickSearch": 1,
-            "filterable": 1,
-            "ext": "http://cmsyun2.qijiyun.vip/api.php/app/"
-        },
-        {
-            "key": "裤佬枫叶4K",
-            "name": "☁云霄丨枫叶丨4K",
-            "type": 3,
-            "api": "https://gh-proxy.org/https://raw.githubusercontent.com/wan828963-code/tvbox-config/refs/heads/main/fengye.js",
-            "searchable": 1,
-            "quickSearch": 1,
-            "filterable": 1,
-            "changeable": 1,
-            "playable": 1
-        },
-    {
-      "key": "山楂",
-      "name": "☁云霄丨山楂丨4K",
-      "type": 3,
-      "api": "https://dogpan.com/f/pg6JCA/山楂.py",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 1,
-      "order_num": 0,
-      "changeable": 0
-    },
-        {
-            "key": "裤佬奈飞4K",
-            "name": "☁云霄丨奈飞丨4K",
-            "type": 1,
-            "api": "https://api.wsyzy.net/api.php/provide/vod",
-            "searchable": 1,
-            "quickSearch": 1,
-            "filterable": 1,
-            "categories": [
-                "4K电影",
-                "Netflix电影",
-                "Netflix自制剧"
-            ]
-        },
           {
       "key": "5",
       "name": "☁云霄影视",
@@ -206,6 +154,58 @@
       "api": "https://iduo.us.ci/gt/leevi0709/one/main/js/drpy2.min.js",
       "ext": "https://iduo.us.ci/gt/leevi0709/one/main/js/戏曲大全.js"
     },
+        {
+      "key" : "裤佬电视直播",
+      "name" : "☁云霄丨电视丨直播",
+      "type" : 3,
+      "api" : "https://jsnz.pages.dev/f/f05e3b39.js"
+        },
+        {
+            "key": "裤佬极影4K",
+            "name": "☁云霄丨极影丨4K",
+            "type": 3,
+            "api": "https://gh-proxy.org/https://raw.githubusercontent.com/wan828963-code/tvbox-config/refs/heads/main/sys/jiying4k.js",
+            "searchable": 1,
+            "quickSearch": 1,
+            "filterable": 1,
+            "ext": "http://cmsyun2.qijiyun.vip/api.php/app/"
+        },
+        {
+            "key": "裤佬枫叶4K",
+            "name": "☁云霄丨枫叶丨4K",
+            "type": 3,
+            "api": "https://gh-proxy.org/https://raw.githubusercontent.com/wan828963-code/tvbox-config/refs/heads/main/fengye.js",
+            "searchable": 1,
+            "quickSearch": 1,
+            "filterable": 1,
+            "changeable": 1,
+            "playable": 1
+        },
+    {
+      "key": "山楂",
+      "name": "☁云霄丨山楂丨4K",
+      "type": 3,
+      "api": "https://dogpan.com/f/pg6JCA/山楂.py",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1,
+      "order_num": 0,
+      "changeable": 0
+    },
+        {
+            "key": "裤佬奈飞4K",
+            "name": "☁云霄丨奈飞丨4K",
+            "type": 1,
+            "api": "https://api.wsyzy.net/api.php/provide/vod",
+            "searchable": 1,
+            "quickSearch": 1,
+            "filterable": 1,
+            "categories": [
+                "4K电影",
+                "Netflix电影",
+                "Netflix自制剧"
+            ]
+        },
         {
             "name": "☁云霄丨瓜子丨影视",
             "key": "Guazi",
