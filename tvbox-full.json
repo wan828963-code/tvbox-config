@@ -23,17 +23,17 @@
       "url": "https://huya.445569.xyz/live.m3u"
     },
     {
-      "name": "斗鱼直播",
+      "name": "☁云霄斗鱼直播",
       "type": 0,
       "url": "https://douyu.445569.xyz/live.m3u"
     },
     {
-      "name": "酷狗直播",
+      "name": "☁云霄酷狗直播",
       "type": 0,
       "url": "https://kugou.445569.xyz/live.m3u"
     },
     {
-      "name": "YY直播",
+      "name": "☁云霄YY直播",
       "type": 0,
       "url": "https://yy.445569.xyz/live.m3u"
     },
@@ -53,15 +53,20 @@
       "url": "https://jsnz.pages.dev/live.m3u"
     },
         {
-            "name": "☁云霄世界杯直播",
-            "type": 0,
-            "url": "https://sports.445569.xyz/live.m3u"
-        },
-        {
             "name": "☁云霄tiktok直播",
             "type": 0,
             "url": "https://tiktok.445569.xyz/live.m3u"
-        }
+        },
+        {
+      "name": "👖裤佬GTA游戏直播",
+      "type": 0,
+      "url": "https://stymei1.pages.dev/live.m3u"
+    },
+    {
+      "name": "🍿哔哩TV直播",
+      "type": 0,
+      "url": "https://445569.pages.dev/https://raw.githubusercontent.com/pan8664716/MultiLive/main/output/bilibili_live.m3u"
+    }
     ],
     "sites": [
         {
@@ -79,8 +84,14 @@
       "key" : "裤佬电视直播",
       "name" : "☁云霄丨电视丨直播",
       "type" : 3,
-      "api" : "https://dogpan.com/f/xGMLHx/%E5%B0%8F%E5%8F%AF%E7%88%B1.js"
+      "api" : "https://jsnz.pages.dev/f/f05e3b39.js"
         },
+          {
+      "key": "聚合",
+      "name": "☁云霄聚合",
+      "type": 3,
+      "api": "https://jsnz.pages.dev/f/4df9fb60.py"
+    },
         {
             "key": "裤佬极影4K",
             "name": "☁云霄丨极影丨4K",
@@ -127,16 +138,73 @@
                 "Netflix自制剧"
             ]
         },
-    {
-      "name": "☁云霄丨AI丨短剧",
-      "key": "Ai短剧",
+          {
+      "key": "5",
+      "name": "☁云霄影视",
       "type": 3,
-      "jar": "https://nos.netease.com/ysf/0589efa17c35af5babb01f6fcfc83abc.png;md5;065ee07e71679d9c273e18fab401f0c0",
-      "api": "csp_HgdhAmns",
-      "searchable": 0,
-      "quickSearch": 0,
-      "changeable": 0,
-      "ext": "https://nos.netease.com/ysf/dac0101040005285380ee886e6e6c660.aowu"
+      "api": "https://jsnz.pages.dev/f/9e53615c.py"
+    },
+          {
+      "key": "11",
+      "name": "☁云霄短剧",
+      "type": 3,
+      "api": "https://jsnz.pages.dev/f/29b94aff.py"
+    },
+    {
+      "key": "12",
+      "name": "☁云霄音乐",
+      "type": 3,
+      "api": "https://jsnz.pages.dev/f/eded33cf.py"
+    },
+    {
+      "key": "13",
+      "name": "☁云霄动漫",
+      "type": 3,
+      "api": "https://jsnz.pages.dev/f/7e20bdb7.py"
+    },
+    {
+      "key": "3",
+      "name": "☁云霄奈飞",
+      "type": 1,
+      "api": "https://api.wsyzy.net/api.php/provide/vod",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1,
+      "categories": [
+        "Netflix电影",
+        "Netflix自制剧"
+      ]
+    },
+    {
+      "key": "4k",
+      "name": "☁云霄4k",
+      "type": 3,
+      "api": "https://jsnz.pages.dev/f/af676592.py"
+    },
+          {
+      "key": "15",
+      "name": "☁云霄听书",
+      "type": 3,
+      "api": "https://jsnz.pages.dev/f/d44dd2cf.py"
+    },
+    {
+      "key": "17",
+      "name": "☁云霄广播",
+      "type": 3,
+      "api": "https://jsnz.pages.dev/f/cec31b11.py"
+    },
+    {
+      "key": "18",
+      "name": "☁云霄有声",
+      "type": 3,
+      "api": "https://jsnz.pages.dev/f/e126d1e4.py"
+    },
+    {
+      "key": "19",
+      "name": "☁云霄戏曲",
+      "type": 3,
+      "api": "https://iduo.us.ci/gt/leevi0709/one/main/js/drpy2.min.js",
+      "ext": "https://iduo.us.ci/gt/leevi0709/one/main/js/戏曲大全.js"
     },
         {
             "name": "☁云霄丨瓜子丨影视",
