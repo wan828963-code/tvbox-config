@@ -221,10 +221,16 @@
             "api": "https://mpimg.cn/down.php/055f3cda37e9db69ab09a0857e7f9db8.py"
         },
     {
-      "key": "裤佬6080影视",
-      "name": "☁云霄丨6080丨影视",
+      "key": "裤佬金牌影视",
+      "name": "☁云霄丨金牌丨影视",
       "type": 3,
-      "api": "https://dogpan.com/f/583DF6/6080影视.py"
+      "api": "https://gh-proxy.org/https://raw.githubusercontent.com/wan828963-code/tvbox-config/refs/heads/main/sys/金牌.py"
+    },
+    {
+      "key": "裤佬6080影视",
+      "name": "☁云霄丨YouTube丨影视",
+      "type": 3,
+      "api": "https://gh-proxy.org/https://raw.githubusercontent.com/wan828963-code/tvbox-config/refs/heads/main/sys/YouTube.py"
     },
     {
       "key": "裤佬V5影视",
