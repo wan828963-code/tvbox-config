@@ -86,6 +86,12 @@
       "type": 3,
       "api": "https://jsnz.pages.dev/f/4df9fb60.py"
     },
+    {
+      "key": "采集",
+      "name": "☁云霄采集",
+      "type": 3,
+      "api": "https://jsnz.pages.dev/f/72b7239d.py"
+    },
           {
       "key": "5",
       "name": "☁云霄影视",
@@ -129,6 +135,48 @@
       "type": 3,
       "api": "https://jsnz.pages.dev/f/af676592.py"
     },
+    {
+      "key": "6",
+      "name": "☁云霄APP",
+      "type": 3,
+      "api": "https://jsnz.pages.dev/f/04b5c0b4.js"
+    },
+    {
+      "key": "7",
+      "name": "☁云霄PY",
+      "type": 3,
+      "api": "https://jsnz.pages.dev/f/e1aeef83.py"
+    },
+    {
+      "key": "8",
+      "name": "☁云霄JS",
+      "type": 3,
+      "api": "https://jsnz.pages.dev/f/f7b46c7f.js"
+    },
+    {
+      "key": "9",
+      "name": "☁云霄PHP",
+      "type": 4,
+      "api": "http://jiduo.3116598.xyz/PHP/pkty.php"
+    },
+    {
+      "key": "10",
+      "name": "☁云霄T4",
+      "type": 4,
+      "api": "https://banyeomni.780420.xyz:17777/api/tvbox/source/2097848348508688384?token=banye666"
+    },
+    {
+      "key": "emby",
+      "name": "☁云霄Emby",
+      "type": 3,
+      "api": "https://jsnz.pages.dev/f/696546f2.js"
+    },
+    {
+      "key": "14",
+      "name": "☁云霄少儿",
+      "type": 3,
+      "api": "https://jsnz.pages.dev/f/6b9e7fca.js"
+    },
           {
       "key": "15",
       "name": "☁云霄听书",
@@ -161,420 +209,6 @@
       "api" : "https://jsnz.pages.dev/f/f05e3b39.js"
         },
         {
-            "key": "裤佬极影4K",
-            "name": "☁云霄丨极影丨4K",
-            "type": 3,
-            "api": "https://gh-proxy.org/https://raw.githubusercontent.com/wan828963-code/tvbox-config/refs/heads/main/sys/jiying4k.js",
-            "searchable": 1,
-            "quickSearch": 1,
-            "filterable": 1,
-            "ext": "http://cmsyun2.qijiyun.vip/api.php/app/"
-        },
-        {
-            "key": "裤佬枫叶4K",
-            "name": "☁云霄丨枫叶丨4K",
-            "type": 3,
-            "api": "https://gh-proxy.org/https://raw.githubusercontent.com/wan828963-code/tvbox-config/refs/heads/main/fengye.js",
-            "searchable": 1,
-            "quickSearch": 1,
-            "filterable": 1,
-            "changeable": 1,
-            "playable": 1
-        },
-    {
-      "key": "山楂",
-      "name": "☁云霄丨山楂丨4K",
-      "type": 3,
-      "api": "https://gh-proxy.org/https://raw.githubusercontent.com/wan828963-code/tvbox-config/refs/heads/main/sys/%E5%B1%B1%E6%A5%82.py",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 1,
-      "order_num": 0,
-      "changeable": 0
-    },
-        {
-            "key": "裤佬奈飞4K",
-            "name": "☁云霄丨奈飞丨4K",
-            "type": 1,
-            "api": "https://api.wsyzy.net/api.php/provide/vod",
-            "searchable": 1,
-            "quickSearch": 1,
-            "filterable": 1,
-            "categories": [
-                "4K电影",
-                "Netflix电影",
-                "Netflix自制剧"
-            ]
-        },
-        {
-            "name": "☁云霄丨瓜子丨影视",
-            "key": "Guazi",
-            "type": 3,
-            "api": "csp_GuaziAmns",
-            "searchable": 1,
-            "quickSearch": 1
-        },
-        {
-            "key": "裤佬瓜子备用",
-            "name": "☁云霄丨瓜子丨备用",
-            "type": 3,
-            "api": "https://mpimg.cn/down.php/055f3cda37e9db69ab09a0857e7f9db8.py"
-        },
-    {
-      "key": "裤佬金牌影视",
-      "name": "☁云霄丨金牌丨影视",
-      "type": 3,
-      "api": "https://gh-proxy.org/https://raw.githubusercontent.com/wan828963-code/tvbox-config/refs/heads/main/sys/金牌.py"
-    },
-    {
-      "key": "裤佬6080影视",
-      "name": "☁云霄丨YouTube丨影视",
-      "type": 3,
-      "api": "https://gh-proxy.org/https://raw.githubusercontent.com/wan828963-code/tvbox-config/refs/heads/main/sys/YouTube.py"
-    },
-    {
-      "key": "裤佬V5影视",
-      "name": "☁云霄丨V5丨影视",
-      "type": 3,
-      "api": "https://dogpan.com/f/98X1c2/V5影视.py",
-      "ext": "http://43.248.117.123:4680"
-    },
-    {
-      "key": "裤佬文才影视",
-      "name": "☁云霄丨文才丨影视",
-      "type": 3,
-      "api": "https://dogpan.com/f/0g38tm/文才影视.py",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 1,
-      "playerType": 2,
-      "ext": {
-        "site": "https://m.hkybqufgh.com,https://m.sizhengxt.com,https://m.9zhoukj.com,https://m.sizhengxt.com,https://m.jiabaide.cn"
-      }
-    },
-        {
-            "name": "☁云霄丨韩剧丨影视",
-            "key": "Hxq",
-            "type": 3,
-            "api": "csp_HxqAmns",
-            "searchable": 1,
-            "quickSearch": 1
-        },
-        {
-            "name": "☁云霄丨夏天丨影视",
-            "key": "NewGrV2",
-            "type": 3,
-            "api": "csp_NewGrV2Amns",
-            "searchable": 1,
-            "quickSearch": 1
-        },
-        {
-            "name": "☁云霄丨橘子丨影视",
-            "key": "Woshinidie",
-            "type": 3,
-            "jar": "https://zl.wpscdn.cn/2026/06/01/space_img/8ec1dbc0-101c-410c-bfe1-0b47a2e6d54c.png",
-            "api": "csp_Woshinidie",
-            "searchable": 1,
-            "quickSearch": 1
-        },
-        {
-            "name": "☁云霄丨快速丨影视",
-            "key": "YIys",
-            "type": 3,
-            "api": "csp_YIysAmns",
-            "searchable": 1,
-            "quickSearch": 1
-        },
-        {
-            "name": "☁云霄丨杜比丨影视",
-            "key": "Dubk",
-            "type": 3,
-            "api": "csp_DubkAmns",
-            "searchable": 1,
-            "quickSearch": 1
-        },
-        {
-            "key": "裤佬葫芦影视",
-            "name": "☁云霄丨葫芦丨影视",
-            "type": 3,
-            "api": "https://gh-proxy.com/https://raw.githubusercontent.com/maoystv/6/main/JS/get.js",
-            "ext": {
-                "host": "https://gh-proxy.com/https://raw.githubusercontent.com/maoystv/6/main/JS/maccos_config.txt",
-                "key": "8R33VQSxzmCaHpEX",
-                "init": "V122",
-                "api": 2,
-                "ua": "okhttp/3.10.0"
-            }
-        },
-        {
-            "key": "裤佬雄鹰影视",
-            "name": "☁云霄丨雄鹰丨影视",
-            "type": 3,
-            "api": "https://gh-proxy.com/https://raw.githubusercontent.com/maoystv/6/main/JS/get.js",
-            "ext": {
-                "host": "https://gh-proxy.com/https://raw.githubusercontent.com/maoystv/6/main/JS/xly.txt",
-                "key": "ca94b06ca359d80e",
-                "init": "V120",
-                "api": 2,
-                "ua": "okhttp/3.10.0"
-            },
-            "categories": ["动漫","电视剧","电影","综艺","短剧","少儿","纪录片"]
-        },
-        {
-            "key": "裤佬人人影视",
-            "name": "☁云霄丨人人丨影视",
-            "type": 3,
-            "api": "https://gh-proxy.com/https://raw.githubusercontent.com/maoystv/api/refs/heads/main/JS/drpy2.min.js",
-            "searchable": 1,
-            "quickSearch": 1,
-            "filterable": 1
-        },
-        {
-            "key": "裤佬枫叶影视",
-            "name": "☁云霄丨枫叶丨影视",
-            "type": 3,
-            "api": "https://gh-proxy.com/https://raw.githubusercontent.com/IY-CPU/IY/main/lib/fy.py"
-        },
-        {
-            "key": "裤佬看剧影视",
-            "name": "☁云霄丨看剧丨影视",
-            "type": 3,
-            "api": "https://gh-proxy.com/https://raw.githubusercontent.com/IY-CPU/IY/main/lib/AppToV5.py",
-            "ext": "http://43.248.117.123:4680"
-        },
-        {
-            "key": "裤佬华数影视",
-            "name": "☁云霄丨华数丨影视",
-            "type": 3,
-            "api": "https://gh-proxy.com/https://raw.githubusercontent.com/IY-CPU/IY/main/lib/华数.py"
-        },
-        {
-            "key": "裤佬星辰影视",
-            "name": "☁云霄丨星辰丨影视",
-            "type": 3,
-            "api": "http://rihou.cc:88/js/星辰影院.js"
-        },
-        {
-            "key": "裤佬泥巴影视",
-            "name": "☁云霄丨泥巴丨影视",
-            "type": 3,
-            "api": "http://rihou.cc:88/js/drpy2.min.js",
-            "ext": "http://rihou.cc:88/js/泥泥视频.js"
-        },
-        {
-            "key": "裤佬MG影视",
-            "name": "☁云霄丨MG丨影视",
-            "type": 3,
-            "playerType": "2",
-            "api": "https://tvbox.catvod.com/js/drpy2.min.js",
-            "ext": "https://tvbox.catvod.com/js/mgtv.js"
-        },
-        {
-            "key": "裤佬爬虫影视",
-            "name": "☁云霄丨爬虫丨影视",
-            "type": 1,
-            "api": "https://dy.7772888.xyz/api.php/tvbox",
-            "searchable": 1,
-            "quickSearch": 1,
-            "filterable": 1
-        },
-        {
-            "key": "裤佬网易影视",
-            "name": "☁云霄丨网易丨影视",
-            "type": 3,
-            "api": "https://wget.la/https://raw.githubusercontent.com/qist/tvbox/master/lib/drpy2.min.js",
-            "ext": "https://wget.la/https://raw.githubusercontent.com/qist/tvbox/master/js/网易公版影像.js"
-        },
-        {
-            "key": "裤佬独播JS",
-            "name": "☁云霄丨独播丨JS",
-            "type": 3,
-            "api": "https://dogpan.com/f/R64pc5/独播库.js"
-        },
-        {
-            "key": "裤佬酷六JS",
-            "name": "☁云霄丨酷六丨JS",
-            "type": 3,
-            "api": "https://wget.la/https://raw.githubusercontent.com/qist/tvbox/master/lib/drpy2.min.js",
-            "ext": "https://wget.la/https://raw.githubusercontent.com/qist/tvbox/master/js/酷6网.js"
-        },
-        {
-            "key": "裤佬EmbyJS",
-            "name": "☁云霄丨Emby丨JS",
-            "type": 3,
-            "api": "https://mpimg.cn/down.php/40d30fe3d9671e0d700f1c272bb20aaa.js",
-            "searchable": 1,
-            "quickSearch": 1
-        },
-        {
-            "key": "裤佬荐片JS",
-            "name": "☁云霄丨荐片丨JS",
-            "type": 3,
-            "api": "https://mpimg.cn/down.php/16ba56f7ddd38134bb0725ad63f1f72b.js",
-            "style": {
-                "type": "rect",
-                "ratio": 1.33
-            }
-        },
-        {
-            "key": "裤佬短剧JS",
-            "name": "☁云霄丨短剧丨JS",
-            "type": 3,
-            "api": "https://mpimg.cn/down.php/93e0decefe3a2ad8949c5fe389d6cab2.js",
-            "style": {
-                "type": "rect",
-                "ratio": 1.33
-            }
-        },
-        {
-            "key": "裤佬永乐JS",
-            "name": "☁云霄丨永乐丨JS",
-            "type": 3,
-            "api": "https://mpimg.cn/down.php/0338609bd59d7b27226f5a269ec97936.js",
-            "style": {
-                "type": "rect",
-                "ratio": 1.33
-            }
-        },
-        {
-            "key": "裤佬毒舌JS",
-            "name": "☁云霄丨毒舌丨JS",
-            "type": 3,
-            "api": "https://gh-proxy.com/https://raw.githubusercontent.com/alantang1977/X/main/laozhang/毒舌影视.js",
-            "style": {
-                "type": "rect",
-                "ratio": 1.33
-            }
-        },
-    {
-      "key": "裤佬太乙影视",
-      "name": "☁云霄丨太乙丨影视",
-      "type": 3,
-      "api": "https://dogpan.com/f/MjmESz/太乙影视.py"
-    },
-    {
-      "key": "裤佬多瑙影视",
-      "name": "☁云霄丨多瑙丨影视",
-      "type": 3,
-      "api": "https://dogpan.com/f/Nxn7Ij/多瑙影视.py"
-    },
-    {
-      "key": "裤佬枝枝影视",
-      "name": "☁云霄丨枝枝丨影视",
-      "type": 3,
-      "api": "https://dogpan.com/f/O7o5hv/枝枝影视.py"
-    },
-    {
-      "key": "裤佬茶杯狐PY",
-      "name": "☁云霄丨茶杯狐丨PY",
-      "type": 3,
-      "api": "https://dogpan.com/f/wjgxUy/茶杯狐影视.py",
-      "searchable": 1,
-      "changeable": 0,
-      "quickSearch": 0,
-      "filterable": 0
-    },
-        {
-            "key": "裤佬端木PY",
-            "name": "☁云霄丨端木丨PY",
-            "type": 3,
-            "api": "https://gh-proxy.org/https:/raw.githubusercontent.com/alantang1977/X/main/py/端木.py",
-            "style": {
-                "type": "rect",
-                "ratio": 1.33
-            }
-        },
-        {
-            "key": "裤佬威士PY",
-            "name": "☁云霄丨威士丨PY",
-            "type": 3,
-            "api": "https://mpimg.cn/down.php/9a74bfc73bb24b1582d75d4fc1af6bee.py",
-            "ext": "http://v.2video.cc"
-        },
-        {
-            "key": "裤佬云播PY",
-            "name": "☁云霄丨云播丨PY",
-            "type": 3,
-            "api": "https://gh-proxy.com/https://raw.githubusercontent.com/maoystv/6/main/PY/天天影视.py"
-        },
-        {
-            "key": "裤佬自营PY",
-            "name": "☁云霄丨自营丨PY",
-            "type": 3,
-            "api": "https://gh-proxy.com/https://raw.githubusercontent.com/IY-CPU/IY/main/lib/fy.py",
-            "searchable": 1
-        },
-        {
-            "key": "裤佬爱剧PY",
-            "name": "☁云霄丨爱剧丨PY",
-            "type": 3,
-            "api": "https://gh-proxy.com/https://raw.githubusercontent.com/maoystv/tt/refs/heads/0/ppx.py",
-            "ext": "http://43.248.117.123:4680"
-        },
-        {
-            "key": "裤佬热播PY",
-            "name": "☁云霄丨热播丨PY",
-            "type": 3,
-            "api": "https://gh-proxy.com/https://raw.githubusercontent.com/alantang1977/X/main/py/热播APP.py",
-            "searchable": 1,
-            "quickSearch": 1,
-            "filterable": 1,
-            "timeout": 60
-        },
-        {
-            "key": "裤佬哔哩PY",
-            "name": "☁云霄丨哔哩丨PY",
-            "type": 3,
-            "api": "https://gh-proxy.com/https://raw.githubusercontent.com/cluntop/cluntop.github.io/refs/heads/main/py/哔哩视频.py",
-            "searchable": 1,
-            "filterable": 1
-        },
-        {
-            "key": "裤佬哇哇PY",
-            "name": "☁云霄丨哇哇丨PY",
-            "type": 3,
-            "api": "https://gh-proxy.com/https://raw.githubusercontent.com/maoystv/6/main/PY/wawa.py",
-            "searchable": 1,
-            "quickSearch": 1,
-            "filterable": 1
-        },
-        {
-            "key": "裤佬MiFunPPY",
-            "name": "☁云霄丨MiFunP丨PY",
-            "type": 3,
-            "api": "https://gh-proxy.com/https://raw.githubusercontent.com/maoystv/6/main/PY/MiFunP动漫.py",
-            "searchable": 1,
-            "quickSearch": 1,
-            "filterable": 1
-        },
-        {
-            "key": "裤佬猎手PY",
-            "name": "☁云霄丨猎手丨PY",
-            "api": "https://mpimg.cn/down.php/60fab5ff33f0b0fd88f099ae3be708bf.py",
-            "filterable": 1,
-            "quickSearch": 1,
-            "searchable": 1,
-            "type": 3
-        },
-        {
-            "key": "裤佬芒果PY",
-            "name": "☁云霄丨芒果丨PY",
-            "api": "https://mpimg.cn/down.php/643d3f9a0b601f25d3e372eeb66e82a5.py",
-            "filterable": 1,
-            "quickSearch": 1,
-            "searchable": 1,
-            "type": 3
-        },
-        {
-            "key": "裤佬兄弟PY",
-            "name": "☁云霄丨兄弟丨PY",
-            "api": "https://mpimg.cn/down.php/b1cdcf76574a0cb24d5b937d46458cdf.py",
-            "filterable": 1,
-            "quickSearch": 1,
-            "searchable": 1,
-            "type": 3
-        },
-        {
             "key": "裤佬央视PY",
             "name": "☁云霄丨央视丨PY",
             "type": 3,
@@ -593,156 +227,6 @@
             "quickSearch": 1,
             "filterable": 1,
             "playerType": 2
-        },
-    {
-      "key": "裤佬酷我音乐",
-      "name": "☁云霄丨酷我丨音乐",
-      "type": 3,
-      "api": "https://dogpan.com/f/VO84ig/酷我音乐.py"
-    },
-    {
-      "key": "裤佬枫叶音乐",
-      "name": "☁云霄丨枫叶丨音乐",
-      "type": 3,
-      "api": "https://dogpan.com/f/KOENc4/枫叶音乐.py",
-      "searchable": 1,
-      "changeable": 1,
-      "quickSearch": 1,
-      "filterable": 1
-    },
-   {
-      "key": "爱听音乐",
-      "name": "☁云霄丨爱听丨音乐",
-      "type": 3,
-      "api": "https://dogpan.com/f/3lJoI2/爱听音乐.py"
-    },
-    {
-      "key": "听了么",
-      "name": "☁云霄丨听了么丨音乐",
-      "type": 3,
-      "api": "https://dogpan.com/f/48KESl/听了么音乐.js"
-    },
-    {
-      "key": "裤佬嘶哩动漫",
-      "name": "☁云霄丨嘶哩丨动漫",
-      "type": 3,
-      "api": "https://dogpan.com/f/LgBkcQ/嘶哩动漫.py",
-      "ext": {
-        "host": "https://gh-proxy.com/https://raw.githubusercontent.com/IY-CPU/IY/main/lib/api.png",
-        "key": "ygcnbcznazmyrbdn",
-        "iv": "6571230062143708"
-      }
-    },
-    {
-      "key": "裤佬MiFunP动漫",
-      "name": "☁云霄丨MiFunP丨动漫",
-      "type": 3,
-      "api": "https://dogpan.com/f/zmlEU4/MiFunP动漫.py",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 1,
-      "changeable": 1
-    },
-    {
-      "key": "去看吧",
-      "name": "☁云霄丨去看丨动漫",
-      "type": 3,
-      "api": "https://gh-proxy.com/raw.githubusercontent.com/IY-CPU/IY/main/lib/drpy2.min.js",
-      "ext": "https://gh-proxy.com/raw.githubusercontent.com/IY-CPU/IY/main/lib/%E5%8E%BB%E7%9C%8B%E5%90%A7.png"
-    },
-    {
-      "key": "喵呜次元",
-      "name": "☁云霄丨喵呜丨动漫",
-      "type": 3,
-      "api": "https://gh-proxy.com/raw.githubusercontent.com/IY-CPU/IY/main/lib/mwcy.js"
-    },
-    {
-      "key": "随机小姐姐",
-      "name": "☁云霄丨随机丨API",
-      "type": 3,
-      "api": "https://gh-proxy.org/https://raw.githubusercontent.com/wan828963-code/tvbox-config/refs/heads/main/sys/随机小姐姐.py"
-    }
-    ],
-  "parses": [
-    {
-      "name": "虾米",
-      "type": 0,
-      "url": "https://jx.xmflv.com/?url=",
-      "ext": {
-        "header": {
-          "user-agent": "Mozilla/5.0 (Linux; Android 13; V2049A Build/TP1A.220624.014; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/116.0.0.0 Mobile Safari/537.36"
         }
-      }
-    },
-    {
-      "name": "云解",
-      "type": 0,
-      "url": "https://yparse.ik9.cc/index.php?url=",
-      "ext": {
-        "header": {
-          "user-agent": "Mozilla/5.0 (Linux; Android 13; V2049A Build/TP1A.220624.014; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/116.0.0.0 Mobile Safari/537.36"
-        }
-      }
-    },
-    {
-      "name": "咸鱼",
-      "type": 0,
-      "url": "https://jx.xymp4.cc/?url=",
-      "ext": {
-        "header": {
-          "user-agent": "Mozilla/5.0 (Linux; Android 13; V2049A Build/TP1A.220624.014; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/116.0.0.0 Mobile Safari/537.36"
-        }
-      }
-    },
-    {
-      "name": "淘片",
-      "type": 0,
-      "url": "https://jx.yparse.com/index.php?url=",
-      "ext": {
-        "header": {
-          "user-agent": "Mozilla/5.0 (Linux; Android 13; V2049A Build/TP1A.220624.014; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/116.0.0.0 Mobile Safari/537.36"
-        }
-      }
-    },
-    {
-      "name": "冰豆",
-      "type": 0,
-      "url": "https://bd.jx.cn/?url=",
-      "ext": {
-        "header": {
-          "user-agent": "Mozilla/5.0 (Linux; Android 13; V2049A Build/TP1A.220624.014; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/116.0.0.0 Mobile Safari/537.36"
-        }
-      }
-    },
-    {
-      "name": "七七",
-      "type": 0,
-      "url": "https://jx.77flv.cc/?url=",
-      "ext": {
-        "header": {
-          "user-agent": "Mozilla/5.0 (Linux; Android 13; V2049A Build/TP1A.220624.014; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/116.0.0.0 Mobile Safari/537.36"
-        }
-      }
-    },
-    {
-      "name": "盘古",
-      "type": 0,
-      "url": "https://www.playm3u8.cn/jiexi.php?url=",
-      "ext": {
-        "header": {
-          "user-agent": "Mozilla/5.0 (Linux; Android 13; V2049A Build/TP1A.220624.014; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/116.0.0.0 Mobile Safari/537.36"
-        }
-      }
-    },
-    {
-      "name": "夜幕",
-      "type": 0,
-      "url": "https://yemu.xyz/?url=",
-      "ext": {
-        "header": {
-          "user-agent": "Mozilla/5.0 (Linux; Android 13; V2049A Build/TP1A.220624.014; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/116.0.0.0 Mobile Safari/537.36"
-        }
-      }
-    }
   ]
 }
