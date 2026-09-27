@@ -80,6 +80,18 @@
             "filterable": 1,
             "ext": "https://gh-proxy.org/https://raw.githubusercontent.com/wan828963-code/tvbox-config/refs/heads/main/sys/paomadeng.txt"
         },
+        {
+      "key": "5",
+      "name": "☁云霄影视",
+      "type": 3,
+      "api": "https://jsnz.pages.dev/f/9e53615c.py"
+    },
+    {
+      "key": "网盘",
+      "name": "☁云霄网盘",
+      "type": 3,
+      "api": "https://jsnz.pages.dev/f/261c1664.py"
+    },
           {
       "key": "聚合",
       "name": "☁云霄聚合",
@@ -91,12 +103,6 @@
       "name": "☁云霄采集",
       "type": 3,
       "api": "https://jsnz.pages.dev/f/72b7239d.py"
-    },
-          {
-      "key": "5",
-      "name": "☁云霄影视",
-      "type": 3,
-      "api": "https://jsnz.pages.dev/f/9e53615c.py"
     },
           {
       "key": "11",
@@ -140,6 +146,12 @@
       "name": "☁云霄APP",
       "type": 3,
       "api": "https://jsnz.pages.dev/f/04b5c0b4.js"
+    },
+   {
+      "key": "API",
+      "name": "☁云霄API",
+      "type": 3,
+      "api": "https://jsnz.pages.dev/f/cf616b2f.py"
     },
     {
       "key": "7",
